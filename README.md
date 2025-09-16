@@ -1,14 +1,14 @@
-# Лабораторна робота №1  
-## Основи Java та модифікатори доступу
+# Lab №1  
+## Java basics and access modifiers
 
-### 🎯 Мета роботи
-Створити базові класи предметної області **"Деканат університету"** з правильним використанням модифікаторів доступу та наслідування в Java.
+### 🎯 Main point
+Create basic classes of subject area **"Food Delivery"** using correct access modifiers and inheritence in Java.
 
 ---
 
-### 📋 Завдання
+### 📋 Task
 
-#### Основні класи:
+#### Basic classes:
 - `Person`  
   - Базовий клас з полями:  
     `protected String firstName`, `lastName`, `email`
