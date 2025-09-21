@@ -10,81 +10,107 @@ Create basic classes of subject area **"Food Delivery"** using correct access mo
 
 #### Basic classes:
 - `Person`  
-  - Базовий клас з полями:  
-    `protected String firstName`, `lastName`, `email`
-- `Student extends Person`  
-  - Додає поля: `private String studentId`, `private Group group`
-- `Teacher extends Person`  
-  - Додає поля: `private String department`, `private String position`
-- `Group`  
-  - Поля: `private String number`, `private String specialty`, `private int startYear`
-- `Subject`  
-  - Поля: `private String title`, `private int credits`
-- `Course`  
-  - Поля: `private Subject subject`, `private Teacher teacher`, `private Group group`
+  - Parent class with members:  
+    `protected String firstName`, `lastName`, `address`
+- `Customer extends Person`
+- `Staff extends Person`  
+  - Additional members: `private float rankOfDelivery;`
+- `Restaurant`  
+  - Members: `private String name`, `private String cuisine`, `private String location`
+- `MenuItem`  
+  - Members: `private String name`, `private float price`, `private float category`
+- `Order`  
+  - Members: `private Customer customer`, `private MenuItem[] menuItems`, `private Date orderDate`
+- `Delivery`
+  - Members: `private Order order`, `private Staff deliverer`, `private Date deliveryTime`
 
 ---
 
-### 📦 Пакет `ua.university.util`
+### 📦 Package `ua.university.util`
 
-#### ✅ Класи утиліти:
+#### ✅ Util classes:
 - `ValidationHelper`  
   - **package-private**  
-  - Методи:
+  - Methods:
     - `isStringMatchPattern(String text, String pattern)`
     - `isNumberBetween(int number, int min, int max)`
     - `isStringLengthBetween(String text, int min, int max)`
+    - `getRandomNumber(int min, int max)`
+    - `isValidDate(Date date)`
 
 - `PersonUtils`  
   - **public**  
-  - Використовує `ValidationHelper`  
-  - Методи:
-    - `formatName(String firstName, String lastName)`
-    - `formatEmail(String email)`
-    - `generateEmailFromName(String firstName, String lastName)`
+  - uses `ValidationHelper`  
+  - Methods:
+    - `String capitalizeText(String str)`
+    - `String formatName(String firstName, String lastName)`
+    - `String formatAddress(String address))`
+    - `isValidName(String name)`
+    - `isValidAddress(String address)`
+    - `createAddressfromName(String addressName)`
 
-- `StudentUtils`  
+- `StaffUtils`  
   - **public**  
-  - Метод:
-    - `formatStudentId(String id)`
+  - Method:
+    - `isValidRanking(float ranking)`
 
-- `GroupUtils`  
-  - **public**  
-  - Метод:
-    - `formatGroupFullNumber(Group group)`
-
+- `RestaurantUtils`  
+  - **public**
+  - uses `ValidationHelper`  
+  - Methods:
+    - `formatRestaurantName(String name)`
+    - `formatRestaurantCuisine(String cuisine)`
+    - `formatRestaurantLocation(String location)`
+    - `isValidRestaurantName(String restaurantName)`
+    - `isValidRestaurantCuisine(String cuisine)`
+    - `isValidRestaurantLocation(String location)`
+      
+- `MenuItemUtils`
+  - **public**
+  - uses `ValidationHelper`
+  - Methods:
+    - `capitalizeText(String str)`
+    - `isValidName(String name)`
+    - `isValidCategory(String category)`
+    - `isValidFloat(float value)`
+ 
+- `DeliveryUtils`
+  - **public**
+  - uses `ValidationHelper`
+  - Method:
+    - `isValidDate(Date date)`
 ---
 
-### 🔐 Використання модифікаторів доступу
+### 🔐 Use of access modifiers
 
-| Модифікатор       | Застосування                                          |
+| Modifier          | Usage                                                 |
 |-------------------|-------------------------------------------------------|
-| `private`         | Для полів класів                                      |
-| `public`          | Для getter/setter методів, конструкторів, утиліт      |
-| `protected`       | Для полів та методів базового класу `Person`         |
-| *package-private* | Для helper класів та допоміжних методів               |
+| `private`         | For the members of the class                          |
+| `public`          | For getters/setters, constructors, utils              |
+| `protected`       | For methods and members of parent class `Person`      |
+| *package-private* | For helper classes and methods                        |
 
 ---
 
-### 🛠️ Реалізувати
+### 🛠️ Implementation
 
-- Конструктори з використанням `super()` у спадкоємцях
-- Методи:
+- constructors using `super()` in child classes
+- Methods:
   - `toString()`
   - `equals()`
   - `hashCode()`
-- Статичні фабричні методи (`static factory methods`)
-- Валідація у конструкторах та сеттерах
+- `static factory methods`
+- Validation in constructors and setters
 
 ---
 
-### 💡 Демонстрація
+### 💡 Demonstration
 
-- Клас `Main` для демонстрації роботи:
-  - Створення об'єктів різними способами
-  - Валідація вхідних даних
-  - Форматування імен та email
-  - Доступ до `protected` та *package-private* елементів
+- Class `Main` for homework representation:
+  - Create objects using different methods
+  - Validation of input value
+  - Formating of names and addresses
+  - Access to `protected` and *package-private* elements
 
 ---
 
