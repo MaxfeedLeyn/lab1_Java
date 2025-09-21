@@ -52,10 +52,10 @@ public class Main {
         Person person1 = new Person();
         person1.setFirstName("Henry");
         person1.setLastName("Stickman");
-        person1.getFullName(); // protected member, comment if necessary
+//        person1.getFullName(); // protected member, comment if nunecessary
         Restaurant restaurant = new Restaurant("Restaurant1", "Italic", "St. center 1");
         System.out.println(restaurant);
-        System.out.println(restaurant.name); // private member, comment if necessary
+//        System.out.println(restaurant.name); // private member, uncomment if necessary
 
         //unsuccess classes
         order1 = Order.createOrder(null, null, null);
