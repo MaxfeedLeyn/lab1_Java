@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ua.university.model.*;
+import ua.university.util.ValidationHelper;
 
 public class Main {
     public static void main(String[] args) {
@@ -56,6 +57,7 @@ public class Main {
         Restaurant restaurant = new Restaurant("Restaurant1", "Italic", "St. center 1");
         System.out.println(restaurant);
 //        System.out.println(restaurant.name); // private member, uncomment if necessary
+//        System.out.println(ValidationHelper.getRandomNumber); // package member
 
         //unsuccess classes
         order1 = Order.createOrder(null, null, null);

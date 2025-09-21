@@ -36,7 +36,7 @@ public class ValidationHelper {
         return (int) (Math.random() * (max - min + 1)) + min;
     }
 
-    public static boolean isValidDate(Date date){
+    static boolean isValidDate(Date date){
         if (date == null) {
             return false;
         }
