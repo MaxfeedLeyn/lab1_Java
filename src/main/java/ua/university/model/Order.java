@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public class Order {
     private Customer customer;
-    MenuItem[] menuItems;
-    Date orderDate;
+    private MenuItem[] menuItems;
+    private Date orderDate;
 
     public Order(){
     }

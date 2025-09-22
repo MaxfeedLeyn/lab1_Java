@@ -11,7 +11,7 @@ public class Customer extends Person {
         super();
     }
 
-    public Customer(String firstName, String lastName, String address) {
+        public Customer(String firstName, String lastName, String address) {
         setFirstName(firstName);
         setLastName(lastName);
         setAddress(address);
