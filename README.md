@@ -26,7 +26,7 @@ Create basic classes of subject area **"Food Delivery"** using correct access mo
 
 ---
 
-### 📦 Package `ua.university.util`
+### 📦 Package `ua.delivery.util`
 
 #### ✅ Util classes:
 - `ValidationHelper`  

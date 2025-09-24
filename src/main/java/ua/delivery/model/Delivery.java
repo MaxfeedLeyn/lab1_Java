@@ -1,8 +1,5 @@
-package ua.university.model;
+package ua.delivery.model;
 
-import ua.university.util.DeliveryUtils;
-
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 

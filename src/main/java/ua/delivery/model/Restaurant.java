@@ -1,6 +1,6 @@
-package ua.university.model;
+package ua.delivery.model;
 
-import ua.university.util.RestaurantUtils;
+import ua.delivery.util.RestaurantUtils;
 
 import java.util.Objects;
 

@@ -1,12 +1,10 @@
-package ua.university.util;
+package ua.delivery.util;
 
-import ua.university.model.Customer;
-import ua.university.model.MenuItem;
-import ua.university.model.Order;
+import ua.delivery.model.Customer;
+import ua.delivery.model.MenuItem;
 
 
 import java.util.Date;
-import java.util.Locale;
 
 public class OrderUtils {
 

@@ -1,7 +1,7 @@
-package ua.university.model;
+package ua.delivery.model;
 
-import ua.university.util.PersonUtils;
-import ua.university.util.StaffUtils;
+import ua.delivery.util.PersonUtils;
+import ua.delivery.util.StaffUtils;
 
 import java.util.Objects;
 

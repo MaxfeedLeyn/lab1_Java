@@ -1,9 +1,6 @@
-package ua.university.util;
+package ua.delivery.util;
 
 import java.util.Date;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.LocalDate;
 
 public class DeliveryUtils {
 

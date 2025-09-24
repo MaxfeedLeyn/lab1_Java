@@ -1,4 +1,4 @@
-package ua.university.util;
+package ua.delivery.util;
 
 public class CustomerUtils {
 

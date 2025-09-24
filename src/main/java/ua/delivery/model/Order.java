@@ -1,6 +1,6 @@
-package ua.university.model;
+package ua.delivery.model;
 
-import ua.university.util.OrderUtils;
+import ua.delivery.util.OrderUtils;
 
 import java.util.Date;
 import java.util.Arrays;

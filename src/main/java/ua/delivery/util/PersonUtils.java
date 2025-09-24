@@ -1,6 +1,4 @@
-package ua.university.util;
-
-import ua.university.Main;
+package ua.delivery.util;
 
 public class PersonUtils {
 

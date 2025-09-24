@@ -1,10 +1,9 @@
-package ua.university;
+package ua.delivery;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import ua.university.model.*;
-import ua.university.util.ValidationHelper;
+import ua.delivery.model.*;
 
 public class Main {
     public static void main(String[] args) {
