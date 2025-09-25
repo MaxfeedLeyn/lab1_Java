@@ -1,30 +1,25 @@
-package ua.university.model;
+package ua.delivery.model;
 
-import ua.university.util.PersonUtils;
+import ua.delivery.util.PersonUtils;
 
 import java.util.Objects;
 
 public class Person {
     protected String firstName;
     protected String lastName;
-    protected String email;
+    protected String address;
 
-    public Person() {
+    public Person(){
     }
 
     public Person(String firstName, String lastName, String email) {
         setFirstName(firstName);
         setLastName(lastName);
-        setEmail(email);
+        setAddress(email);
     }
 
     protected String getFullName() {
         return PersonUtils.formatName(firstName, lastName);
-    }
-
-
-    public String getFirstName() {
-        return firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -33,34 +28,38 @@ public class Person {
         }
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setLastName(String lastName) {
-        if (PersonUtils.isValidName(lastName)) {
+        if(PersonUtils.isValidName(lastName)) {
             this.lastName = PersonUtils.capitalizeText(lastName);
         }
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        if (email != null) {
-            String formattedEmail = PersonUtils.formatEmail(email);
-            if (PersonUtils.isValidEmail(formattedEmail)) {
-                this.email = formattedEmail;
+    public void setAddress(String address) {
+        if(address != null) {
+            address = PersonUtils.formatAddress(address);
+            if(PersonUtils.isValidAddress(address)) {
+                this.address = address;
             }
         }
     }
 
-    public static Person createPerson(String firstName, String lastName) {
-        if (PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName)) {
-            String email = PersonUtils.generateEmailFromNames(firstName, lastName);
-            return new Person(firstName, lastName, email);
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public static Person createPerson(String firstName, String lastName, String addressName) {
+        if(PersonUtils.isValidName(firstName) &&
+                PersonUtils.isValidName(lastName) &&
+                PersonUtils.isValidAddress(addressName)) {
+            return new Person(firstName, lastName, addressName);
         }
         return null;
     }
@@ -68,9 +67,9 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                "firstName=" + firstName + '\'' +
+                ", lastName=" + lastName + '\'' +
+                ", address=" + address +
                 '}';
     }
 
@@ -81,11 +80,11 @@ public class Person {
         Person person = (Person) o;
         return Objects.equals(firstName, person.firstName) &&
                 Objects.equals(lastName, person.lastName) &&
-                Objects.equals(email, person.email);
+                Objects.equals(address, person.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, email);
+        return Objects.hash(firstName, lastName, address);
     }
 }
