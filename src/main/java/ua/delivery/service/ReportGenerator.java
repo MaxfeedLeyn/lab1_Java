@@ -1,7 +1,6 @@
 package ua.delivery.service;
 
 import ua.delivery.model.OrderDelivery;
-import ua.delivery.model.OrderStatus;
 
 public class ReportGenerator {
 
@@ -19,7 +18,7 @@ public class ReportGenerator {
 
         for (OrderDelivery delivery : orderDeliveries) {
             report.append(String.format(
-                    "Status: %s, \n Customer: %s, \n Delivery: %s",
+                    "Status: %s, \n Customer: %s, \n Delivery: %s %n",
                     formatOrderStatus(delivery),
                     delivery.customer().toString(),
                     delivery.delivery().toString()
