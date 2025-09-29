@@ -18,13 +18,12 @@ public class ReportGenerator {
 
         for (OrderDelivery delivery : orderDeliveries) {
             report.append(String.format(
-                    "Status: %s, \n Customer: %s, \n Delivery: %s %n",
+                    "Status: %s, \n Delivery: %s %n",
                     formatOrderStatus(delivery),
-                    delivery.customer().toString(),
                     delivery.delivery().toString()
             ));
+            report.append("\n");
         }
-
         return report.toString();
     }
 }

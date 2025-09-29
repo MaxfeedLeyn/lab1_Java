@@ -60,9 +60,9 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "Customer=" + customer.toString() + '\'' +
-                ", MenuItems=" + Arrays.toString(menuItems) + '\'' +
-                ", Date=" + orderDate +
+                "Customer='" + customer.toString() + '\'' +
+                ", MenuItems='" + Arrays.toString(menuItems) + '\'' +
+                ", Date='" + orderDate +
                 '}';
     }
 

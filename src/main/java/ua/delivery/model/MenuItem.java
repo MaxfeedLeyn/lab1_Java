@@ -60,9 +60,9 @@ public class MenuItem {
     @Override
     public String toString() {
         return "Cuisine{" +
-                "Name=" + name + '\'' +
-                ", Price=" + price + '\'' +
-                ", Category='" + category +
+                "Name='" + name + '\'' +
+                ", Price='" + price + '\'' +
+                ", Category=''" + category +
                 '}';
     }
 

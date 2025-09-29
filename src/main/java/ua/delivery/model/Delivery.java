@@ -1,32 +1,33 @@
 package ua.delivery.model;
 
+import ua.delivery.util.DeliveryUtils;
+
 import java.util.Date;
 import java.util.Objects;
 
-public class Delivery {
-    private Order order;
-    private Staff deliverer;
-    private Date deliveryTime;
+public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
+
+    public Delivery{
+        boolean hasCriticalErrors = false;
+        if (order == null) {
+            hasCriticalErrors = true;
+            System.out.println("Error when create Delivery: Order can`t be null");
+        }
+        if (deliverer == null) {
+            hasCriticalErrors = true;
+            System.out.println("Error when create Delivery: Staff can`t be null");
+        }
+        if(!DeliveryUtils.isValidDate(deliveryTime)) {
+            hasCriticalErrors = true;
+            System.out.println("Error when create Delivery: Invalid delivery time");
+        }
+        if (hasCriticalErrors) {
+            System.out.println("Subject was created with errors!");
+        }
+    }
 
     public Delivery(){
-    }
-
-    public Delivery(Order order, Staff deliverer, Date deliveryTime) {
-        setOrder(order);
-        setDeliverer(deliverer);
-        setDeliveryTime(deliveryTime);
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public void setDeliverer(Staff deliverer) {
-        this.deliverer = deliverer;
-    }
-
-    public void setDeliveryTime(Date deliveryTime) {
-        this.deliveryTime = deliveryTime;
+        this(null, null, null);
     }
 
     public Order getOrder() {
@@ -52,7 +53,7 @@ public class Delivery {
     public String toString() {
         return "Delivery{" +
                 "Order=" + order.toString() + '\'' +
-                "deliveryTime=" + deliveryTime.toString() +
+                ", deliveryTime=" + deliveryTime.toString() +
                 '}';
     }
 
@@ -61,9 +62,9 @@ public class Delivery {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Delivery delivery = (Delivery) o;
-        return Objects.equals(order, delivery.order) &&
-                Objects.equals(deliverer, delivery.deliverer) &&
-                Objects.equals(deliveryTime, delivery.deliveryTime);
+        return Objects.equals(delivery.order, order) &&
+                Objects.equals(delivery.deliverer, deliverer) &&
+                Objects.equals(delivery.deliveryTime, deliveryTime);
     }
 
     @Override

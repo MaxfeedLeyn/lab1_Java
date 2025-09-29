@@ -43,9 +43,9 @@ public class Staff  extends Person{
     @Override
     public String toString() {
         return "Staff{" +
-                "firstName=" + firstName + '\'' +
-                ", lastName" +  lastName + '\'' +
-                ", address=" + address +
+                "firstName='" + firstName + '\'' +
+                ", lastName'" +  lastName + '\'' +
+                ", address='" + address +
                 '}';
     }
 
