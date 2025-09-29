@@ -18,15 +18,15 @@ public class Delivery {
     }
 
     public void setOrder(Order order) {
-        this.order = order;
+        if(order != null) this.order = order;
     }
 
     public void setDeliverer(Staff deliverer) {
-        this.deliverer = deliverer;
+        if(deliverer != null) this.deliverer = deliverer;
     }
 
     public void setDeliveryTime(Date deliveryTime) {
-        this.deliveryTime = deliveryTime;
+        if (deliveryTime != null) this.deliveryTime = deliveryTime;
     }
 
     public Order getOrder() {
@@ -51,8 +51,8 @@ public class Delivery {
     @Override
     public String toString() {
         return "Delivery{" +
-                "Order=" + order.toString() + '\'' +
-                "deliveryTime=" + deliveryTime.toString() +
+                ", Order='" + order.toString() + '\'' +
+                ", deliveryTime='" + deliveryTime.toString() +
                 '}';
     }
 
