@@ -44,7 +44,9 @@ public class Staff  extends Person{
     public String toString() {
         return "Staff{" +
                 "firstName='" + firstName + '\'' +
-                ", lastName'" +  lastName + '\'' +
+                ", lastName='" +  lastName + '\'' +
+                ", lastName='" +  lastName + '\'' +
+                ", lastName='" +  lastName + '\'' +
                 ", address='" + address +
                 '}';
     }
