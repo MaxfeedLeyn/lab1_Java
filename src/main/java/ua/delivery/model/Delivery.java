@@ -15,12 +15,6 @@ public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
 
     private static final Logger logger = Logger.getLogger(Delivery.class.getName());
 
-    private static final SimpleDateFormat FIXED_DATE_FORMAT;
-    static {
-        FIXED_DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-        FIXED_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("Europe/Kyiv"));
-    }
-
     public Delivery{
         if (order == null) {
             String errorMessage = "Order is null, must be set.";
@@ -66,11 +60,10 @@ public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
 
     @Override
     public String toString() {
-        String dateStr = deliveryTime == null ? "null" : FIXED_DATE_FORMAT.format(deliveryTime);
         return "Delivery{" +
                 "Order='" + order.toString() + '\'' +
                 ", Staff='" + deliverer.toString() + '\'' +
-                ", deliveryTime=" + dateStr +
+                ", deliveryTime=" + deliveryTime.toString() +
                 '}';
     }
 

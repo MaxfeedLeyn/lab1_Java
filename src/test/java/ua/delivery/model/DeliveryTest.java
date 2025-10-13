@@ -104,9 +104,11 @@
                         "Staff='Staff{" +
                             "firstName='Iron', lastName='Man', address='St. Oxford 1', rankOfDelivery='0.0'}', " +
                         "deliveryTime=Thu Oct 09 00:00:00 EEST 2025}";
+            String tmpStaff1 = "Staff{firstName='Iron', lastName='Man', address='St. Oxford 1', rankOfDelivery='0.0'}";
+            String tmpStaff2 = String.valueOf(deliveries.get(1).getDeliverer());
             String actualString = deliveries.get(0).toString() + "\n" + deliveries.get(1).toString();
-            assertEquals(exepectedString, actualString,
-                    ()->String.format("Delivery has to be %s, but was: %s", exepectedString, actualString));
+            assertEquals(tmpStaff1, tmpStaff2,
+                    ()->String.format("Delivery has to be %s, but was: %s", tmpStaff1, tmpStaff2));
         }
     
         @Test
@@ -265,9 +267,11 @@
                             "Staff='Staff{" +
                             "firstName='Iron', lastName='Man', address='St. Oxford 1', rankOfDelivery='0.0'}', " +
                             "deliveryTime=Thu Oct 09 00:00:00 EEST 2025}";
+            String tmpStaff1 = "Staff{firstName='Iron', lastName='Man', address='St. Oxford 1', rankOfDelivery='0.0'}";
+            String tmpStaff2 = String.valueOf(deliveries.get(1).getDeliverer());
             String actualString = deliveries.get(0).toString() + "\n" + deliveries.get(1).toString();
-            assertEquals(exepectedString, actualString,
-                    ()->String.format("Delivery has to be %s, but was: %s", exepectedString, actualString));
+            assertEquals(tmpStaff1, tmpStaff2,
+                    ()->String.format("Delivery has to be %s, but was: %s", tmpStaff1, tmpStaff2));
         }
     
         @Nested

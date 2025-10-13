@@ -91,11 +91,10 @@ public class Order {
 
     @Override
     public String toString() {
-        String dateStr = orderDate == null ? "null" : FIXED_DATE_FORMAT.format(orderDate);
         return "Order{" +
                 "Customer='" + customer.toString() + '\'' +
                 ", MenuItems='" + Arrays.toString(menuItems) + '\'' +
-                ", Date='" + dateStr +
+                ", Date='" + orderDate +
                 '}';
     }
 
