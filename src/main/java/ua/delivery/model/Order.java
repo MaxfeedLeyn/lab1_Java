@@ -95,7 +95,7 @@ public class Order {
         return "Order{" +
                 "Customer='" + customer.toString() + '\'' +
                 ", MenuItems='" + Arrays.toString(menuItems) + '\'' +
-                ", Date='" + orderDate +
+                ", Date='" + dateStr +
                 '}';
     }
 
