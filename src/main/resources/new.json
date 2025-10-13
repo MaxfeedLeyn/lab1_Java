@@ -1,0 +1,60 @@
+{
+  "delivery": [
+    {
+      "order": {
+        "customer" : {
+          "firstName": "Peter",
+          "lastName": "Quill",
+          "address": "St. Oxford 1"
+        },
+        "menuItem": [
+          {
+            "name": "Pasta",
+            "price": 10,
+            "category": "Italic"
+          },
+          {
+            "name": "Burger",
+            "price": 20,
+            "category": "American"
+          }
+        ],
+        "date": "09-Oct-2025"
+      },
+      "staff": {
+        "firstName": "Iron",
+        "lastName": "Man",
+        "address": "St. Oxford 1"
+      },
+      "date": "09-Oct-2025"
+    },
+    {
+      "order": {
+        "customer": {
+          "firstName": "Bruce",
+          "lastName": "Wayne",
+          "address": "St. Central 2"
+        },
+        "menuItem": [
+          {
+            "name": "Fried chicken",
+            "price": 15,
+            "category": "American"
+          },
+          {
+            "name": "Joker",
+            "price": 30,
+            "category": "American"
+          }
+        ],
+        "date": "09-Oct-2025"
+      },
+      "staff": {
+        "firstName": "Iron",
+        "lastName": "Man",
+        "address": "St. Oxford 1"
+      },
+      "date": "09-Oct-2025"
+    }
+  ]
+}
