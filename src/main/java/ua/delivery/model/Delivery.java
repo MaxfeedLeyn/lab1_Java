@@ -3,6 +3,9 @@ package ua.delivery.model;
 import ua.delivery.util.DeliveryUtils;
 import ua.delivery.exception.InvalidDataException;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -11,6 +14,12 @@ import java.util.logging.Logger;
 public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
 
     private static final Logger logger = Logger.getLogger(Delivery.class.getName());
+
+    private static final SimpleDateFormat FIXED_DATE_FORMAT;
+    static {
+        FIXED_DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        FIXED_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("Europe/Kyiv"));
+    }
 
     public Delivery{
         if (order == null) {
@@ -57,10 +66,11 @@ public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
 
     @Override
     public String toString() {
+        String dateStr = deliveryTime == null ? "null" : FIXED_DATE_FORMAT.format(deliveryTime);
         return "Delivery{" +
                 "Order='" + order.toString() + '\'' +
                 ", Staff='" + deliverer.toString() + '\'' +
-                ", deliveryTime=" + deliveryTime.toString() +
+                ", deliveryTime=" + dateStr +
                 '}';
     }
 

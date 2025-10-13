@@ -10,10 +10,20 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
+
 public class Order {
     private Customer customer;
     private MenuItem[] menuItems;
     private Date orderDate;
+
+    private static final SimpleDateFormat FIXED_DATE_FORMAT;
+    static {
+        FIXED_DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        FIXED_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("Europe/Kyiv")); // ensures EEST for Oct 9
+    }
 
     private static final Logger logger = Logger.getLogger(Order.class.getName());
 
@@ -81,6 +91,7 @@ public class Order {
 
     @Override
     public String toString() {
+        String dateStr = orderDate == null ? "null" : FIXED_DATE_FORMAT.format(orderDate);
         return "Order{" +
                 "Customer='" + customer.toString() + '\'' +
                 ", MenuItems='" + Arrays.toString(menuItems) + '\'' +
