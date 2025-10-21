@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import java.util.Objects;
 
-public record Customer(String firstName, String lastName, String address) {
+public record Customer(String firstName, String lastName, String address) implements Comparable<Customer>{
 
     public Customer(){
         this("null", "null", "St. null 1");
@@ -67,6 +67,11 @@ public record Customer(String firstName, String lastName, String address) {
 
     public String getFullName() {
             return firstName + " " + lastName;
+    }
+
+    @Override
+    public int compareTo(Customer o) {
+            return this.getFullName().compareTo(o.getFullName());
     }
 
     @Override

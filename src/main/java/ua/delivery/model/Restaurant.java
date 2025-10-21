@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Restaurant {
+public class Restaurant implements Comparable<Restaurant> {
     private String name;
     private String cuisine;
     private String location;
@@ -72,6 +72,11 @@ public class Restaurant {
             return new Restaurant(restaurantName, restaurantCuisine, location);
         }
         throw new InvalidDataException("The attempt to create a Restaurant has failed, check name, cuisine and location!");
+    }
+
+    @Override
+    public int compareTo(Restaurant o) {
+        return this.getName().compareTo(o.getName());
     }
 
     @Override

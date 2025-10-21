@@ -4,20 +4,15 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.assertj.core.api.SoftAssertions;
-import ua.delivery.repository.GenericRepository;
 import ua.delivery.model.Customer;
-//import ua.delivery.model.Student;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("Repository Tests")
-public class RepositoryTest {
+@DisplayName("GenericRepository Tests")
+public class GenericRepositoryTest {
 
     private GenericRepository<Customer> customerRepository;
     private Customer customer1, customer2, customer3;
@@ -262,6 +257,32 @@ public class RepositoryTest {
         softly.assertThat(customerRepository.getAll())
                 .as("GetAll should return empty list after clear")
                 .isEmpty();
+        softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("sort Tests asc")
+    void testSort(){
+        customerRepository.add(customer2);
+        customerRepository.add(customer3);
+        customerRepository.sortByIdentity("asc");
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(customerRepository.getItemsForTesting().get(0)).isEqualTo(customer1);
+        softly.assertThat(customerRepository.getItemsForTesting().get(1)).isEqualTo(customer2);
+        softly.assertThat(customerRepository.getItemsForTesting().get(2)).isEqualTo(customer3);
+        softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("sort Test desc")
+    void testSortDesc(){
+        customerRepository.add(customer2);
+        customerRepository.add(customer3);
+        customerRepository.sortByIdentity("desc");
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(customerRepository.getItemsForTesting().get(0)).isEqualTo(customer3);
+        softly.assertThat(customerRepository.getItemsForTesting().get(1)).isEqualTo(customer2);
+        softly.assertThat(customerRepository.getItemsForTesting().get(2)).isEqualTo(customer1);
         softly.assertAll();
     }
 }

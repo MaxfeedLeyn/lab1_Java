@@ -5,7 +5,7 @@ import ua.delivery.util.PersonUtils;
 
 import java.util.Objects;
 
-public class Person {
+public class Person implements Comparable<Person> {
     protected String firstName;
     protected String lastName;
     protected String address;
@@ -77,6 +77,11 @@ public class Person {
             return new Person(firstName, lastName, addressName);
         }
         throw new InvalidDataException("The attempt to create a Client has failed, check firstName and lastName and address(St. NameofTheStreet 1-1000)!");
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return this.getFullName().compareTo(o.getFullName());
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
+public record Delivery(Order order, Staff deliverer, Date deliveryTime) implements Comparable<Delivery> {
 
     private static final Logger logger = Logger.getLogger(Delivery.class.getName());
 
@@ -56,6 +56,11 @@ public record Delivery(Order order, Staff deliverer, Date deliveryTime) {
             throw new InvalidDataException("None of the objects (order, deliverer with deliveryTime) should be null.");
         }
         return new Delivery(order, deliverer, deliveryTime);
+    }
+
+    @Override
+    public int compareTo(Delivery o){
+        return deliveryTime.compareTo(o.deliveryTime);
     }
 
     @Override

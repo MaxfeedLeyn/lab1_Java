@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Staff extends Person{
+public class Staff extends Person {
     private float rankOfDelivery = 0;
 
     private static final Logger logger = Logger.getLogger(Staff.class.getName());

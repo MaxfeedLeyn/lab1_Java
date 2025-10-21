@@ -121,4 +121,18 @@ public class GenericRepository<T> {
     List<T> getItemsForTesting() {
         return items;
     }
+
+    public void sortByIdentity(String order){
+
+        Comparator<T> comparator = Comparator.comparing(
+                identityExtractor::extractIdentity,
+                Comparator.nullsFirst(String::compareTo));
+
+        if (order != null && (order.equalsIgnoreCase("desc") || order.equalsIgnoreCase("descending"))) {
+            comparator = comparator.reversed();
+        }
+
+        items.sort(comparator);
+        logger.info("Sorted " + entityType + " by identity (" + (order == null ? "asc" : order) + "). Count: " + items.size());
+    }
 }

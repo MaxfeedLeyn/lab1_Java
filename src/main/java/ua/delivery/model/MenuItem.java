@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import java.util.Objects;
 
-public class MenuItem {
+public class MenuItem implements Comparable<MenuItem> {
     private String name;
     private float price;
     private String category;
@@ -79,6 +79,11 @@ public class MenuItem {
             return new MenuItem(name, price, category);
         }
         throw new InvalidDataException("The attempt to create a MenuItem has failed, check name, price and category!");
+    }
+
+    @Override
+    public int compareTo(MenuItem o) {
+        return this.name.compareTo(o.name);
     }
 
     @Override

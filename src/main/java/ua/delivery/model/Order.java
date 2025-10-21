@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class Order {
+public class Order implements Comparable<Order> {
     private Customer customer;
     private MenuItem[] menuItems;
     private Date orderDate;
@@ -87,6 +87,11 @@ public class Order {
             return new Order(customer, menuItems, orderDate);
         }
         throw new InvalidDataException("The attempt to create a Order has failed, check customer, menu items and order date!");
+    }
+
+    @Override
+    public int compareTo(Order o) {
+        return this.orderDate.compareTo(o.orderDate);
     }
 
     @Override
