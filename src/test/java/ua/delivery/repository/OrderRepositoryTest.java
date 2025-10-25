@@ -45,22 +45,22 @@ public class OrderRepositoryTest {
 
     @BeforeEach
     public void setup() {
-        orderList = new ArrayList<>();
-        orderList.add(order1);
-        orderList.add(order2);
-        orderList.add(order3);
-        orderRepository = new OrderRepository(orderList);
+        orderRepository = new OrderRepository();
+        orderRepository.add(order1);
+        orderRepository.add(order2);
+        orderRepository.add(order3);
     }
 
     @Test
     @DisplayName("Default sort Test")
     void defaultSortTest() {
-        Collections.sort(orderList);
+        List<Order> orders = orderRepository.getAll();
+        Collections.sort(orders);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(orderList.get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
-        softly.assertThat(orderList.get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
-        softly.assertThat(orderList.get(2).getOrderDate()).isEqualTo(order3.getOrderDate());
+        softly.assertThat(orders.get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
+        softly.assertThat(orders.get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
+        softly.assertThat(orders.get(2).getOrderDate()).isEqualTo(order3.getOrderDate());
         softly.assertAll();
     }
 
@@ -71,54 +71,44 @@ public class OrderRepositoryTest {
         @Test
         @DisplayName("sortByCustomerNameAsc Test")
         void sortByCustomerNameAscTest() {
-            orderRepository.sortByCustomerNameAsc();
+            List<Order> orders = orderRepository.sortByCustomerNameAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(orderRepository.getItemsForTesting().get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
-            softly.assertThat(orderRepository.getItemsForTesting().get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
-            softly.assertThat(orderRepository.getItemsForTesting().get(2).getOrderDate()).isEqualTo(order3.getOrderDate());
+            softly.assertThat(orders.get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
+            softly.assertThat(orders.get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
+            softly.assertThat(orders.get(2).getOrderDate()).isEqualTo(order3.getOrderDate());
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByCustomerNameDesc Test")
         void sortByCustomerNameDescTest() {
-            orderRepository.sortByCustomerNameDesc();
+            List<Order> orders = orderRepository.sortByCustomerNameDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(orderRepository.getItemsForTesting().get(0).getOrderDate()).isEqualTo(order3.getOrderDate());
-            softly.assertThat(orderRepository.getItemsForTesting().get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
-            softly.assertThat(orderRepository.getItemsForTesting().get(2).getOrderDate()).isEqualTo(order1.getOrderDate());
+            softly.assertThat(orders.get(0).getOrderDate()).isEqualTo(order3.getOrderDate());
+            softly.assertThat(orders.get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
+            softly.assertThat(orders.get(2).getOrderDate()).isEqualTo(order1.getOrderDate());
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByDateDesc Test")
         void sortByDateDescTest() {
-            orderRepository.sortByDateDesc();
+            List<Order> orders = orderRepository.sortByDateDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(orderRepository.getItemsForTesting().get(0).getOrderDate()).isEqualTo(order3.getOrderDate());
-            softly.assertThat(orderRepository.getItemsForTesting().get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
-            softly.assertThat(orderRepository.getItemsForTesting().get(2).getOrderDate()).isEqualTo(order1.getOrderDate());
+            softly.assertThat(orders.get(0).getOrderDate()).isEqualTo(order3.getOrderDate());
+            softly.assertThat(orders.get(1).getOrderDate()).isEqualTo(order2.getOrderDate());
+            softly.assertThat(orders.get(2).getOrderDate()).isEqualTo(order1.getOrderDate());
             softly.assertAll();
-        }
-
-        @Test
-        @DisplayName("sortNull Test")
-        void sortNullTest() {
-            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-                OrderRepository nullOrderRepository = new OrderRepository(null);
-            });
-            assertTrue(exception.getMessage().contains("Can not be null"));
         }
 
         @Test
         @DisplayName("Sort only one check")
         void sortOnlyOneCheckTest(){
-            List<Order> oneOrder = new ArrayList<>();
-            oneOrder.add(order1);
-            OrderRepository oneOrderRepo = new OrderRepository(oneOrder);
-            oneOrderRepo.sortByCustomerNameAsc();
+            OrderRepository oneElement = new OrderRepository();
+            oneElement.add(order1);
+            List<Order> orders = oneElement.sortByCustomerNameAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(oneOrderRepo.getItemsForTesting().get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
+            softly.assertThat(orders.get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
             softly.assertAll();
         }
     }

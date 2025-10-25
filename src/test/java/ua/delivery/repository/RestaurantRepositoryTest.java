@@ -21,7 +21,6 @@ public class RestaurantRepositoryTest {
 
     private RestaurantRepository restaurantRepository;
     private Restaurant restaurant1, restaurant2, restaurant3;
-    private List<Restaurant> restaurantList;
 
     @BeforeAll
     void setUpTestData() {
@@ -32,22 +31,22 @@ public class RestaurantRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        restaurantList = new ArrayList<>();
-        restaurantList.add(restaurant1);
-        restaurantList.add(restaurant2);
-        restaurantList.add(restaurant3);
-        restaurantRepository = new RestaurantRepository(restaurantList);
+        restaurantRepository = new RestaurantRepository();
+        restaurantRepository.add(restaurant1);
+        restaurantRepository.add(restaurant2);
+        restaurantRepository.add(restaurant3);
     }
 
     @Test
     @DisplayName("Default sort Test")
     void defaultSortTest(){
-        Collections.sort(restaurantList);
+        List<Restaurant> restaurants = restaurantRepository.getAll();
+        Collections.sort(restaurants);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(restaurantList.get(0).getName()).isEqualTo(restaurant2.getName());
-        softly.assertThat(restaurantList.get(1).getName()).isEqualTo(restaurant3.getName());
-        softly.assertThat(restaurantList.get(2).getName()).isEqualTo(restaurant1.getName());
+        softly.assertThat(restaurants.get(0).getName()).isEqualTo(restaurant2.getName());
+        softly.assertThat(restaurants.get(1).getName()).isEqualTo(restaurant3.getName());
+        softly.assertThat(restaurants.get(2).getName()).isEqualTo(restaurant1.getName());
         softly.assertAll();
     }
 
@@ -58,54 +57,44 @@ public class RestaurantRepositoryTest {
         @Test
         @DisplayName("sortByNameDesc Test")
         void sortByNameDescTest(){
-            restaurantRepository.sortByNameDesc();
+            List<Restaurant> restaurants = restaurantRepository.sortByNameDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(0).getName()).isEqualTo(restaurant1.getName());
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(1).getName()).isEqualTo(restaurant3.getName());
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(2).getName()).isEqualTo(restaurant2.getName());
+            softly.assertThat(restaurants.get(0).getName()).isEqualTo(restaurant1.getName());
+            softly.assertThat(restaurants.get(1).getName()).isEqualTo(restaurant3.getName());
+            softly.assertThat(restaurants.get(2).getName()).isEqualTo(restaurant2.getName());
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByLocationAsc Test")
         void  sortByLocationAscTest(){
-            restaurantRepository.sortByLocationAsc();
+            List<Restaurant> restaurants = restaurantRepository.sortByLocationAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(0).getName()).isEqualTo(restaurant1.getName());
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(1).getName()).isEqualTo(restaurant2.getName());
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(2).getName()).isEqualTo(restaurant3.getName());
+            softly.assertThat(restaurants.get(0).getName()).isEqualTo(restaurant1.getName());
+            softly.assertThat(restaurants.get(1).getName()).isEqualTo(restaurant2.getName());
+            softly.assertThat(restaurants.get(2).getName()).isEqualTo(restaurant3.getName());
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByLocationDesc Test")
         void  sortByLocationDescTest(){
-            restaurantRepository.sortByLocationDesc();
+            List<Restaurant> restaurants = restaurantRepository.sortByLocationDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(0).getName()).isEqualTo(restaurant3.getName());
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(1).getName()).isEqualTo(restaurant2.getName());
-            softly.assertThat(restaurantRepository.getItemsForTesting().get(2).getName()).isEqualTo(restaurant1.getName());
+            softly.assertThat(restaurants.get(0).getName()).isEqualTo(restaurant3.getName());
+            softly.assertThat(restaurants.get(1).getName()).isEqualTo(restaurant2.getName());
+            softly.assertThat(restaurants.get(2).getName()).isEqualTo(restaurant1.getName());
             softly.assertAll();
-        }
-
-        @Test
-        @DisplayName("Sort null Test")
-        void sortNullTest(){
-            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-                RestaurantRepository nullRestaurantRepository = new RestaurantRepository(null);
-            });
-            assertTrue(exception.getMessage().contains("Can not be null"));
         }
 
         @Test
         @DisplayName("Sort one element Test")
         void sortOneElementTest(){
-            List<Restaurant> tmp = new ArrayList<>();
-            tmp.add(restaurant1);
-            RestaurantRepository one = new RestaurantRepository(tmp);
+            RestaurantRepository oneElement = new RestaurantRepository();
+            oneElement.add(restaurant1);
             SoftAssertions softly = new SoftAssertions();
-            one.sortByLocationAsc();
-            softly.assertThat(one.getItemsForTesting().get(0).getName()).isEqualTo(restaurant1.getName());
+            List<Restaurant> oneRestaurant = oneElement.sortByLocationAsc();
+            softly.assertThat(oneRestaurant.get(0).getName()).isEqualTo(restaurant1.getName());
             softly.assertAll();
         }
     }

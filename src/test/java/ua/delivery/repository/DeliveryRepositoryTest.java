@@ -16,13 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("CustomerRepository Tests")
 public class DeliveryRepositoryTest {
 
-    private DeliveryRepository deliveryRepository;
     private Delivery delivery1, delivery2, delivery3;
     private Customer customer1, customer2, customer3;
     private MenuItem menuItem1, menuItem2, menuItem3;
     private Order order1, order2, order3;
     private Staff staff1, staff2, staff3;
-    private List<Delivery> deliveryList;
+    private DeliveryRepository deliveryRepository;
 
     @BeforeAll
     public void setUpTestData() {
@@ -53,22 +52,22 @@ public class DeliveryRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        deliveryList = new ArrayList<>();
-        deliveryList.add(delivery1);
-        deliveryList.add(delivery2);
-        deliveryList.add(delivery3);
-        deliveryRepository = new DeliveryRepository(deliveryList);
+        deliveryRepository = new DeliveryRepository();
+        deliveryRepository.add(delivery1);
+        deliveryRepository.add(delivery2);
+        deliveryRepository.add(delivery3);
     }
 
     @Test
     @DisplayName("Default Sort Test")
     public void sortDefaultTest() {
-        Collections.sort(deliveryList);
+        List<Delivery> deliveries = deliveryRepository.getAll();
+        Collections.sort(deliveries);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(deliveryList.get(0).getOrder()).isEqualTo(order1);
-        softly.assertThat(deliveryList.get(1).getOrder()).isEqualTo(order2);
-        softly.assertThat(deliveryList.get(2).getOrder()).isEqualTo(order3);
+        softly.assertThat(deliveries.get(0).getOrder()).isEqualTo(order1);
+        softly.assertThat(deliveries.get(1).getOrder()).isEqualTo(order2);
+        softly.assertThat(deliveries.get(2).getOrder()).isEqualTo(order3);
         softly.assertAll();
     }
 
@@ -79,76 +78,66 @@ public class DeliveryRepositoryTest {
         @Test
         @DisplayName("sortByCustomerNameAsc Test")
         void sortByCustomerNameAscTest() {
-            deliveryRepository.sortByCustomerNameAsc();
+            List<Delivery> deliveries = deliveryRepository.sortByCustomerNameAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(0)).isEqualTo(delivery1);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(1)).isEqualTo(delivery2);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(2)).isEqualTo(delivery3);
+            softly.assertThat(deliveries.get(0)).isEqualTo(delivery1);
+            softly.assertThat(deliveries.get(1)).isEqualTo(delivery2);
+            softly.assertThat(deliveries.get(2)).isEqualTo(delivery3);
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByCustomerNameDesc Test")
         void sortByCustomerNameDescTest() {
-            deliveryRepository.sortByCustomerNameDesc();
+            List<Delivery> deliveries = deliveryRepository.sortByCustomerNameDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(0)).isEqualTo(delivery3);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(1)).isEqualTo(delivery2);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(2)).isEqualTo(delivery1);
+            softly.assertThat(deliveries.get(0)).isEqualTo(delivery3);
+            softly.assertThat(deliveries.get(1)).isEqualTo(delivery2);
+            softly.assertThat(deliveries.get(2)).isEqualTo(delivery1);
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByDateDesc Test")
         void sortByDateDescTest(){
-            deliveryRepository.sortByDateDesc();
+            List<Delivery> deliveries = deliveryRepository.sortByDateDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(0)).isEqualTo(delivery3);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(1)).isEqualTo(delivery2);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(2)).isEqualTo(delivery1);
+            softly.assertThat(deliveries.get(0)).isEqualTo(delivery3);
+            softly.assertThat(deliveries.get(1)).isEqualTo(delivery2);
+            softly.assertThat(deliveries.get(2)).isEqualTo(delivery1);
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByStaffAsc Test")
         void sortByStaffAscTest() {
-            deliveryRepository.sortByStaffAsc();
+            List<Delivery> deliveries = deliveryRepository.sortByStaffAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(0)).isEqualTo(delivery1);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(1)).isEqualTo(delivery2);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(2)).isEqualTo(delivery3);
+            softly.assertThat(deliveries.get(0)).isEqualTo(delivery1);
+            softly.assertThat(deliveries.get(1)).isEqualTo(delivery2);
+            softly.assertThat(deliveries.get(2)).isEqualTo(delivery3);
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByStaffDesc Test")
         void sortByStaffDescTest() {
-            deliveryRepository.sortByStaffDesc();
+            List<Delivery> deliveries = deliveryRepository.sortByStaffDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(0)).isEqualTo(delivery3);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(1)).isEqualTo(delivery2);
-            softly.assertThat(deliveryRepository.getItemsForTesting().get(2)).isEqualTo(delivery1);
+            softly.assertThat(deliveries.get(0)).isEqualTo(delivery3);
+            softly.assertThat(deliveries.get(1)).isEqualTo(delivery2);
+            softly.assertThat(deliveries.get(2)).isEqualTo(delivery1);
             softly.assertAll();
-        }
-
-        @Test
-        @DisplayName("Sort null Test")
-        void sortNullTest() {
-            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-                DeliveryRepository nullDeliveryRepository = new DeliveryRepository(null);
-            });
-            assertTrue(exception.getMessage().contains("Can not be null"));
         }
 
         @Test
         @DisplayName("Sort only one element Test")
         void sortOnlyOneElementTest() {
-            List<Delivery> oneElement = new ArrayList<>();
-            oneElement.add(delivery1);
-            DeliveryRepository deliveryRepositoryOne = new DeliveryRepository(oneElement);
-            deliveryRepositoryOne.sortByCustomerNameAsc();
+            DeliveryRepository deliveryRepository1 = new DeliveryRepository();
+            deliveryRepository1.add(delivery1);
+            List<Delivery> oneElement = deliveryRepository1.sortByCustomerNameAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(deliveryRepositoryOne.getItemsForTesting().get(0)).isEqualTo(delivery1);
+            softly.assertThat(oneElement.get(0)).isEqualTo(delivery1);
             softly.assertAll();
         }
     }

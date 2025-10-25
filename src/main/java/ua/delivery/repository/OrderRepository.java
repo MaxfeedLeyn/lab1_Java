@@ -7,38 +7,35 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-public class OrderRepository {
+public class OrderRepository extends GenericRepository<Order>{
 
     private static final Logger logger = Logger.getLogger(CustomerRepository.class.getName());
 
-    private static List<Order> items;
-
-    public OrderRepository(List<Order> items) {
-        if (items == null) {
-            throw new InvalidDataException("Can not be null");
-        }
-        OrderRepository.items = items;
-        logger.info("Created OrderRepository with " + items.size() + " items");
+    public OrderRepository() {
+        super(order -> String.valueOf(order.getOrderDate()), "order");
     }
 
-    public void sortByCustomerNameAsc(){
-        items.sort((o1, o2) ->
+    public List<Order> sortByCustomerNameAsc(){
+        List<Order> orders = getAll();
+        orders.sort((o1, o2) ->
                 o1.getCustomer().getFullName().compareTo(o2.getCustomer().getFullName()));
-        logger.info("Sorted OrderRepository by name ascending :" + OrderRepository.items.size() + " items");
+        logger.info("Sorted OrderRepository by name ascending :" + orders.size() + " items");
+        return orders;
     }
 
-    public void sortByCustomerNameDesc(){
-        items.sort((o1, o2) ->
+    public List<Order> sortByCustomerNameDesc(){
+        List<Order> orders = getAll();
+        orders.sort((o1, o2) ->
                 o2.getCustomer().getFullName().compareTo(o1.getCustomer().getFullName()));
-        logger.info("Sorted OrderRepository by name descending :" + OrderRepository.items.size() + " items");
+        logger.info("Sorted OrderRepository by name descending :" + orders.size() + " items");
+        return orders;
     }
 
-    public void sortByDateDesc(){
-        items.sort((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate()));
-        logger.info("Sorted OrderRepository by date descending :" + OrderRepository.items.size() + " items");
+    public List<Order> sortByDateDesc(){
+        List<Order> orders = getAll();
+        orders.sort((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate()));
+        logger.info("Sorted OrderRepository by date descending :" + orders.size() + " items");
+        return orders;
     }
 
-    List<Order> getItemsForTesting() {
-        return items;
-    }
 }

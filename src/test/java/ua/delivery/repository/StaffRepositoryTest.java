@@ -18,7 +18,6 @@ public class StaffRepositoryTest {
 
     private StaffRepository staffRepository;
     private Staff staff1, staff2, staff3;
-    private List<Staff> staffList;
 
     @BeforeAll
     void setUpTestData(){
@@ -29,16 +28,16 @@ public class StaffRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        staffList = new ArrayList<>();
-        staffList.add(staff2);
-        staffList.add(staff1);
-        staffList.add(staff3);
-        staffRepository = new StaffRepository(staffList);
+        staffRepository = new StaffRepository();
+        staffRepository.add(staff2);
+        staffRepository.add(staff1);
+        staffRepository.add(staff3);
     }
 
     @Test
     @DisplayName("Default sort Test")
     void defaultSortTest(){
+        List<Staff> staffList = staffRepository.getAll();
         Collections.sort(staffList);
 
         SoftAssertions softly = new SoftAssertions();
@@ -55,54 +54,44 @@ public class StaffRepositoryTest {
         @Test
         @DisplayName("sortByNameDesc Test")
         void sortByNameDescTest(){
-            staffRepository.sortByNameDesc();
+            List<Staff> staffList = staffRepository.sortByNameDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(staffRepository.getItemsForTesting().get(0).getFirstName()).isEqualTo(staff3.getFirstName());
-            softly.assertThat(staffRepository.getItemsForTesting().get(1).getFirstName()).isEqualTo(staff2.getFirstName());
-            softly.assertThat(staffRepository.getItemsForTesting().get(2).getFirstName()).isEqualTo(staff1.getFirstName());
+            softly.assertThat(staffList.get(0).getFirstName()).isEqualTo(staff3.getFirstName());
+            softly.assertThat(staffList.get(1).getFirstName()).isEqualTo(staff2.getFirstName());
+            softly.assertThat(staffList.get(2).getFirstName()).isEqualTo(staff1.getFirstName());
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByLastNameAsc")
         void sortByLastNameAscTest(){
-            staffRepository.sortByLastNameAsc();
+            List<Staff> staffList = staffRepository.sortByLastNameAsc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(staffRepository.getItemsForTesting().get(0).getFirstName()).isEqualTo(staff1.getFirstName());
-            softly.assertThat(staffRepository.getItemsForTesting().get(1).getFirstName()).isEqualTo(staff3.getFirstName());
-            softly.assertThat(staffRepository.getItemsForTesting().get(2).getFirstName()).isEqualTo(staff2.getFirstName());
+            softly.assertThat(staffList.get(0).getFirstName()).isEqualTo(staff1.getFirstName());
+            softly.assertThat(staffList.get(1).getFirstName()).isEqualTo(staff3.getFirstName());
+            softly.assertThat(staffList.get(2).getFirstName()).isEqualTo(staff2.getFirstName());
             softly.assertAll();
         }
 
         @Test
         @DisplayName("sortByLastNameDesc")
         void sortByLastNameDescTest(){
-            staffRepository.sortByLastNameDesc();
+            List<Staff> staffList = staffRepository.sortByLastNameDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(staffRepository.getItemsForTesting().get(0).getFirstName()).isEqualTo(staff2.getFirstName());
-            softly.assertThat(staffRepository.getItemsForTesting().get(1).getFirstName()).isEqualTo(staff3.getFirstName());
-            softly.assertThat(staffRepository.getItemsForTesting().get(2).getFirstName()).isEqualTo(staff1.getFirstName());
+            softly.assertThat(staffList.get(0).getFirstName()).isEqualTo(staff2.getFirstName());
+            softly.assertThat(staffList.get(1).getFirstName()).isEqualTo(staff3.getFirstName());
+            softly.assertThat(staffList.get(2).getFirstName()).isEqualTo(staff1.getFirstName());
             softly.assertAll();
-        }
-
-        @Test
-        @DisplayName("sort null check")
-        void sortNullCheckTest(){
-            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-                CustomerRepository nullCustomerRepository = new CustomerRepository(null);
-            });
-            assertTrue(exception.getMessage().contains("Can not be null"));
         }
 
         @Test
         @DisplayName("Sort only one check")
         void sortOnlyOneCheckTest(){
-            List<Staff> oneCustomer = new ArrayList<>();
-            oneCustomer.add(staff1);
-            StaffRepository oneCustomerRepo = new StaffRepository(oneCustomer);
-            oneCustomerRepo.sortByNameDesc();
+            StaffRepository oneStaff = new StaffRepository();
+            oneStaff.add(staff1);
+            List<Staff> oneElement = oneStaff.sortByNameDesc();
             SoftAssertions softly = new SoftAssertions();
-            softly.assertThat(oneCustomerRepo.getItemsForTesting().get(0).getFirstName()).isEqualTo(staff1.getFirstName());
+            softly.assertThat(oneElement.get(0).getFirstName()).isEqualTo(staff1.getFirstName());
             softly.assertAll();
         }
     }

@@ -25,7 +25,7 @@ public class Person implements Comparable<Person> {
         this.address = person.address;
     }
 
-    protected String getFullName() {
+    public String getFullName() {
         return PersonUtils.formatName(firstName, lastName);
     }
 
