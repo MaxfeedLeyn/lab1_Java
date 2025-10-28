@@ -111,5 +111,15 @@ public class OrderRepositoryTest {
             softly.assertThat(orders.get(0).getOrderDate()).isEqualTo(order1.getOrderDate());
             softly.assertAll();
         }
+
+        @Test
+        @DisplayName("findCustomerOrderedSumBiggerThan")
+        void findCustomerOrderedSumBiggerThanTest(){
+            List<Customer> customers = orderRepository.findCustomerOrderedSumBiggerThan(16f);
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(customers.get(0).getFullName()).isEqualTo(customer2.getFullName());
+            softly.assertThat(customers).hasSize(1);
+            softly.assertAll();
+        }
     }
 }

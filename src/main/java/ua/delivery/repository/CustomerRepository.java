@@ -4,6 +4,7 @@ import ua.delivery.exception.InvalidDataException;
 import ua.delivery.model.Customer;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class CustomerRepository extends GenericRepository<Customer>{
 
@@ -52,6 +53,28 @@ public class CustomerRepository extends GenericRepository<Customer>{
         List<Customer> customers = getAll();
         customers.sort((c1, c2) -> c2.getAddress().compareTo(c1.getAddress()));
         logger.info("Sorted CustomerRepository by address descending :" + customers.size() + " items");
+        return customers;
+    }
+
+    public List<Customer> findByFirstName(String firstName) {
+        if(firstName == null || firstName.isEmpty())
+            return Collections.emptyList();
+        String lowered = firstName.toLowerCase();
+        List<Customer> customers = getAll().stream()
+                .filter(c -> c.getFirstName().toLowerCase().equals(lowered))
+                .collect(Collectors.toList());
+        logger.info("Found Customers by first name :" + customers.size() + " items");
+        return customers;
+    }
+
+    public List<Customer> findByLastName(String lastName) {
+        if(lastName == null || lastName.isEmpty())
+            return Collections.emptyList();
+        String lowered = lastName.toLowerCase();
+        List<Customer> customers =  getAll().stream()
+                .filter(c -> c.getLastName().toLowerCase().equals(lowered))
+                .collect(Collectors.toList());
+        logger.info("Found Customers by last name :" + customers.size() + " items");
         return customers;
     }
 }

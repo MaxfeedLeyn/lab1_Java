@@ -94,5 +94,34 @@ public class MenuItemRepositoryTest {
             List<MenuItem> oneItem = oneElementMenuItemRepository.sortByPriceAsc();
             softly.assertThat(oneItem.get(0).getName()).isEqualTo(menuItem1.getName());
         }
+
+        @Test
+        @DisplayName("findByNameTest")
+        void findByNameTest() {
+            List<MenuItem> menuItems = menuItemRepository.findByName("Taco");
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(menuItems.get(0).getName()).isEqualTo(menuItem3.getName());
+            softly.assertAll();
+        }
+
+        @Test
+        @DisplayName("increasePriceDueInflation")
+        void increasePriceDueInflationTest() {
+            List<MenuItem> menuItems = menuItemRepository.increasePriceDueInflation(0.15f);
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(menuItems.get(0).getPrice()).isBetween(17.82499f, 17.825f);
+            softly.assertAll();
+        }
+
+        @Test
+        @DisplayName("findByPriceInRange")
+        void findByPriceInRangeTest() {
+            List<MenuItem> menuItems = menuItemRepository.findByPriceInRange(15f, 22f);
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(menuItems.get(0).getName()).isEqualTo(menuItem1.getName());
+            softly.assertThat(menuItems.get(1).getName()).isEqualTo(menuItem2.getName());
+            softly.assertThat(menuItems).hasSize(2);
+            softly.assertAll();
+        }
     }
 }

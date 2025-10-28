@@ -118,5 +118,23 @@ public class CustomerRepositoryTest {
             softly.assertThat(customers.get(0).getFullName()).isEqualTo(customer1.getFullName());
             softly.assertAll();
         }
+
+        @Test
+        @DisplayName("findByFirstName")
+        void findByFirstNameTest(){
+            List<Customer> customers = customerRepository.findByFirstName("Steven");
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(customers.get(0).getFullName()).isEqualTo(customer3.getFullName());
+            softly.assertAll();
+        }
+
+        @Test
+        @DisplayName("findByLastName")
+        void findByLastNameTest(){
+            List<Customer> customers = customerRepository.findByLastName("Polson");
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(customers.get(0).getFullName()).isEqualTo(customer2.getFullName());
+            softly.assertAll();
+        }
     }
 }
