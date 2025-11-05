@@ -216,7 +216,7 @@ public class ValidationHelperTest {
         @DisplayName("Should return true with valid date")
         void testValidDate() {
             Calendar cal = Calendar.getInstance();
-            cal.set(2025, Calendar.SEPTEMBER, 29);
+            cal.set(2025, Calendar.NOVEMBER, 29);
             Date orderDate = cal.getTime();
 
             assertTrue(ValidationHelper.isValidDate(orderDate));

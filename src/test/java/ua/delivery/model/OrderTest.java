@@ -63,7 +63,7 @@ public class OrderTest {
         @DisplayName("Should create order with valid values")
         void testCreateOrderWithValidValues() {
             Calendar cal = Calendar.getInstance();
-            cal.set(2025, Calendar.SEPTEMBER, 29);
+            cal.set(2025, Calendar.NOVEMBER, 29);
             Date orderDate = cal.getTime();
             Customer customer = new Customer("Alex", "Vasilenko", "      St. center 13                   ");
             MenuItem[] menuItems = new MenuItem[2];
@@ -90,7 +90,7 @@ public class OrderTest {
         @DisplayName("Should format toString correctly with all fields")
         void testToStringWithAllFields() {
             Calendar cal = Calendar.getInstance();
-            cal.set(2025, Calendar.SEPTEMBER, 29);
+            cal.set(2025, Calendar.NOVEMBER, 29);
             Date orderDate = cal.getTime();
             Customer customer = new Customer("Alex", "Vasilenko", "      St. center 13                   ");
             MenuItem[] menuItems = new MenuItem[2];
@@ -98,7 +98,7 @@ public class OrderTest {
             menuItems[1] = MenuItem.createMenuItem("Burger", 20, "American");
             Order order = Order.createOrder(customer, menuItems, orderDate);
 
-            String exepecteString = "Order{Customer='Customer{firstName='Alex', lastName='Vasilenko', address='St. Center 13}', MenuItems='[Cuisine{Name='Pizza', Price='10.0', Category='Italic'}, Cuisine{Name='Burger', Price='20.0', Category='American'}]', Date='Mon Sep 29}";
+            String exepecteString = "Order{Customer='Customer{firstName='Alex', lastName='Vasilenko', address='St. Center 13}', MenuItems='[Cuisine{Name='Pizza', Price='10.0', Category='Italic'}, Cuisine{Name='Burger', Price='20.0', Category='American'}]', Date='Sat Nov 29}";
 
             assertEquals(exepecteString, order.toString().substring(0, exepecteString.length()-1) + '}',
                     ()->String.format("Expected toString correctly: %s, but was %s",
@@ -116,7 +116,7 @@ public class OrderTest {
 
         private EqualsAndHashCodeTests(){
             Calendar cal = Calendar.getInstance();
-            cal.set(2025, Calendar.SEPTEMBER, 29);
+            cal.set(2025, Calendar.OCTOBER, 29);
             orderDate = cal.getTime();
             customer = new Customer("Alex", "Vasilenko", "      St. center 13                   ");
             menuItems = new MenuItem[2];

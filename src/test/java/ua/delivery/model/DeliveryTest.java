@@ -282,7 +282,7 @@
             @DisplayName("Default constructor should create delivery with null fields")
             void testConstructor() {
                 Calendar cal = Calendar.getInstance();
-                cal.set(2025, Calendar.SEPTEMBER, 29);
+                cal.set(2025, Calendar.NOVEMBER, 29);
                 Date orderDate = cal.getTime();
                 Customer customer = new Customer("Alex", "Vasilenko", "      St. center 13                   ");
                 MenuItem[] menuItems = new MenuItem[2];
