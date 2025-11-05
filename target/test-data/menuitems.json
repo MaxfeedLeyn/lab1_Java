@@ -1,0 +1,16 @@
+[ {
+  "name" : "Pasta",
+  "price" : 10.0,
+  "category" : "Italian",
+  "complete" : true
+}, {
+  "name" : "Filet-o-fish",
+  "price" : 20.0,
+  "category" : "English",
+  "complete" : true
+}, {
+  "name" : "Burrito",
+  "price" : 25.0,
+  "category" : "Mexican",
+  "complete" : true
+} ]

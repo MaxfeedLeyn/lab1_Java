@@ -1,10 +1,15 @@
 package ua.delivery.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ua.delivery.exception.InvalidDataException;
 import ua.delivery.util.PersonUtils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Person implements Comparable<Person> {
     protected String firstName;
     protected String lastName;
@@ -13,7 +18,10 @@ public class Person implements Comparable<Person> {
     public Person(){
     }
 
-    public Person(String firstName, String lastName, String email) {
+    public Person(
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("address") String email) {
         setFirstName(firstName);
         setLastName(lastName);
         setAddress(email);
@@ -81,6 +89,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
+
         return this.getFullName().compareTo(o.getFullName());
     }
 

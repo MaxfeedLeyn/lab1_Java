@@ -1,5 +1,6 @@
 package ua.delivery.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ua.delivery.util.MenuItemUtils;
 import ua.delivery.exception.InvalidDataException;
 
@@ -8,6 +9,7 @@ import java.util.logging.Logger;
 
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MenuItem implements Comparable<MenuItem> {
     private String name;
     private float price;

@@ -1,0 +1,16 @@
+[ {
+  "firstName" : "Jane",
+  "lastName" : "Doe",
+  "address" : "St. Central 1",
+  "fullName" : "Jane Doe"
+}, {
+  "firstName" : "Robert",
+  "lastName" : "Polson",
+  "address" : "St. Central 2",
+  "fullName" : "Robert Polson"
+}, {
+  "firstName" : "Sao",
+  "lastName" : "Paulo",
+  "address" : "St. Central 3",
+  "fullName" : "Sao Paulo"
+} ]
