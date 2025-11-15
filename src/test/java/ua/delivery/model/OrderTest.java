@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import ua.delivery.exception.InvalidDataException;
 
 import java.lang.reflect.Modifier;
 import java.util.Calendar;
@@ -32,11 +33,11 @@ public class OrderTest {
         @DisplayName("Constructor should not set invalid fields")
         void testConstructorWithInvalidData() {
             Customer customer = new Customer("Robert", "Polson", "St. Central 1");
-            Order order = new Order(customer, null, null);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                Order order = new Order(customer, null, null);
+            });
 
-            assertNull(order.getMenuItems(), "Expected menuItems to be null when invalid name provided");
-            assertEquals(customer, order.getCustomer(), "Expected customer to be set when valid");
-            assertNull(order.getOrderDate(), "Expected date to be null when invalid address provided");
+            assertTrue(exception.getMessage().contains("MenuItems cannot be null"));
         }
     }
 

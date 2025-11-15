@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import ua.delivery.exception.InvalidDataException;
 
 import java.lang.reflect.Modifier;
 
@@ -57,7 +58,7 @@ public class MenuItemTest {
         })
         @DisplayName("Should set and capitalize valid names")
         void testValidFirstNames(String input, String expected) {
-            MenuItem menuItem = new MenuItem();
+            MenuItem menuItem = new MenuItem("Random", 15f, "American");
             menuItem.setName(input);
 
             assertEquals(expected, menuItem.getName(),
@@ -68,9 +69,8 @@ public class MenuItemTest {
         @DisplayName("Should not set null name")
         void testSetNullFirstName() {
             MenuItem menuItem = new MenuItem();
-            menuItem.setName(null);
-
-            assertNull(menuItem.getName(), "Expected name to remain null, when null is provided");
+            InvalidDataException test = assertThrows(InvalidDataException.class, () -> menuItem.setName(null));
+            assertTrue(test.getMessage().contains("Category cannot"));
         }
     }
 

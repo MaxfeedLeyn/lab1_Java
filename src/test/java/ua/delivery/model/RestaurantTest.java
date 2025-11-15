@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import ua.delivery.exception.InvalidDataException;
 
 import java.lang.reflect.Modifier;
 
@@ -30,11 +31,12 @@ public class RestaurantTest {
         @Test
         @DisplayName("Constructor should not set invalid fields")
         void testConstructorWithInvalidData() {
-            Restaurant restaurant = new Restaurant("", "Italic", "invalidAddress");
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                Restaurant restaurant = new Restaurant("", "Italic", "invalidAddress");
+            });
 
-            assertNull(restaurant.getName(), "Expected name to be null when invalid name provided");
-            assertEquals("Italic", restaurant.getCuisine(), "Expected cuisine to be set when valid");
-            assertNull(restaurant.getLocation(), "Expected location to be null when invalid address provided");
+            assertTrue(exception.getMessage().contains("Name cannot be null or blank"));
+//            assertTrue(exception.getMessage().contains("Location must match pattern St. NameOfStreet number"));
         }
 
         @Test
@@ -87,7 +89,7 @@ public class RestaurantTest {
         })
         @DisplayName("Should format cuisine when valid values")
         void SetCuisineWithValidTest(String cuisine, String expectedCuisine){
-            Restaurant restaurant = new Restaurant("Lalala", cuisine, "St. LaFelicita");
+            Restaurant restaurant = new Restaurant("Lalala", cuisine, "St. LaFelicita 1");
             assertEquals(expectedCuisine, restaurant.getCuisine(),
                     ()->String.format("Expected cuisine: %s, but was: %s", expectedCuisine, restaurant.getCuisine()));
         }
@@ -95,15 +97,21 @@ public class RestaurantTest {
         @Test
         @DisplayName("Should remain name null if set null")
         void SetNullNameTest(){
-            Restaurant restaurant = new Restaurant(null, "ValidValue", "St. LaFelicita 2");
-            assertNull(restaurant.getName(), "Expected name to be null after invalid value");
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                Restaurant restaurant = new Restaurant(null, "ValidValue", "St. LaFelicita 2");
+            });
+
+            assertTrue(exception.getMessage().contains("Name cannot be null or blank"));
         }
 
         @Test
         @DisplayName("Should remain cuisine null if set null")
         void SetNullCuisineTest(){
-            Restaurant restaurant = new Restaurant("Lalala", null, "St. LaFelicita 2");
-            assertNull(restaurant.getCuisine(), "Expected cuisine to be null after invalid value");
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                Restaurant restaurant = new Restaurant("Lalala", null, "St. LaFelicita 2");
+            });
+
+            assertTrue(exception.getMessage().contains("Cuisine cannot be null or blank"));
         }
     }
 

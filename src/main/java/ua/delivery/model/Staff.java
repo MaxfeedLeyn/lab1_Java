@@ -2,6 +2,8 @@ package ua.delivery.model;
 
 import ua.delivery.util.PersonUtils;
 import ua.delivery.util.StaffUtils;
+import jakarta.validation.constraints.*;
+import ua.delivery.util.ValidationUtils;
 
 import java.util.Objects;
 
@@ -9,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Staff extends Person {
+
+    @Min(value = 0, message = "Rank must be at least 0")
     private float rankOfDelivery = 0;
 
     private static final Logger logger = Logger.getLogger(Staff.class.getName());
@@ -20,7 +24,8 @@ public class Staff extends Person {
 
     public Staff(String firstName, String lastName, String address, float rankOfDelivery) {
         super(firstName, lastName, address);
-        setRankOfDelivery(rankOfDelivery);
+        this.rankOfDelivery = rankOfDelivery;
+        ValidationUtils.validate(this);
         logger.log(Level.INFO, "Staff created");
     }
 
@@ -41,23 +46,17 @@ public class Staff extends Person {
     }
 
     public static Staff create(String firstName, String lastName, String address){
-        if(PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName) &&
-                PersonUtils.isValidAddress(address)){
-            logger.log(Level.INFO, "Staff created");
-            return new Staff(firstName, lastName, address);
-        }
-        return null;
+        Staff staff = new Staff(firstName, lastName, address);
+        ValidationUtils.validate(staff);
+        logger.log(Level.INFO, "Staff created");
+        return staff;
     }
 
     public static Staff create(String firstName, String lastName, String address, float rankOfDelivery){
-        if(PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName) &&
-                PersonUtils.isValidAddress(address) && StaffUtils.isValidRanking(rankOfDelivery)){
-            logger.log(Level.INFO, "Staff created");
-            return new Staff(firstName, lastName, address, rankOfDelivery);
-        }
-        return null;
+        Staff staff = new Staff(firstName, lastName, address, rankOfDelivery);
+        ValidationUtils.validate(staff);
+        logger.log(Level.INFO, "Staff created");
+        return staff;
     }
 
     public float getRankOfDelivery() {

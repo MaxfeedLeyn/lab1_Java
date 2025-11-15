@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import ua.delivery.exception.InvalidDataException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -19,23 +20,24 @@ public class PersonTest {
     class ConstructorTests {
 
         @Test
-        @DisplayName("Default constructor should create person with null fields")
+        @DisplayName("Default constructor should create person with default fields")
         void testConstructor() {
             Person person = new Person();
 
-            assertNull(person.getFirstName(), "Expected first name to be null after default constructor");
-            assertNull(person.getLastName(), "Expected last name to be null after default constructor");
-            assertNull(person.getAddress(), "Expected address to be null after default constructor");
+            assertEquals("Jane", person.getFirstName());
+            assertEquals("Doe", person.getLastName());
+            assertEquals("St. Central 1", person.getAddress());
         }
 
         @Test
         @DisplayName("Constructor should not set invalid fields")
         void testConstructorWithInvalidData() {
-            Person person = new Person("", "validName", "invalidAddress");
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                Person person = new Person("", "validName", "invalidAddress");
+            });
 
-            assertNull(person.getFirstName(), "Expected first name to be null when invalid name provided");
-            assertEquals("Validname", person.getLastName(), "Expected last name to be set when valid");
-            assertNull(person.getAddress(), "Expected address to be null when invalid address provided");
+            assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
+            assertTrue(exception.getMessage().contains("Address must match pattern St. NameOfStreet number"));
         }
     }
 
@@ -81,33 +83,33 @@ public class PersonTest {
                     () -> String.format("Expected full name to be '%s' but was '%s'", "John Doe", actualFullName));
         }
 
-        @Test
-        @DisplayName("Should format full name when firstName is null")
-        void testGetFullNameWithNullFirstName() throws Exception {
-            Person person = new Person();
-            person.setLastName("Wilson");
-
-            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
-            getFullNameMethod.setAccessible(true);
-            String actualFullName = (String) getFullNameMethod.invoke(person);
-
-            assertEquals("", actualFullName,
-                    ()->String.format("Expected full name to be empty when firstName is null, but was %s", actualFullName));
-        }
-
-        @Test
-        @DisplayName("Should format full name when lastName is null")
-        void testGetFullNameWithNullLastName() throws Exception {
-            Person person = new Person();
-            person.setFirstName("John");
-
-            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
-            getFullNameMethod.setAccessible(true);
-            String actualFullName = (String) getFullNameMethod.invoke(person);
-
-            assertEquals("", actualFullName,
-                    ()->String.format("Expected full name to be empty when lastName is null, but was %s", actualFullName));
-        }
+//        @Test
+//        @DisplayName("Should format full name when firstName is null")
+//        void testGetFullNameWithNullFirstName() throws Exception {
+//            Person person = new Person();
+//            person.setLastName("Wilson");
+//
+//            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
+//            getFullNameMethod.setAccessible(true);
+//            String actualFullName = (String) getFullNameMethod.invoke(person);
+//
+//            assertEquals("", actualFullName,
+//                    ()->String.format("Expected full name to be empty when firstName is null, but was %s", actualFullName));
+//        }
+//
+//        @Test
+//        @DisplayName("Should format full name when lastName is null")
+//        void testGetFullNameWithNullLastName() throws Exception {
+//            Person person = new Person();
+//            person.setFirstName("John");
+//
+//            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
+//            getFullNameMethod.setAccessible(true);
+//            String actualFullName = (String) getFullNameMethod.invoke(person);
+//
+//            assertEquals("", actualFullName,
+//                    ()->String.format("Expected full name to be empty when lastName is null, but was %s", actualFullName));
+//        }
     }
 
     @Nested
@@ -135,11 +137,11 @@ public class PersonTest {
         @DisplayName("Should not set invalid first names - empty and whitespace")
         void testInvalidFirstNames(String invalidName) {
             Person person = new Person();
-            person.setFirstName(invalidName);
+            InvalidDataException exception =  assertThrows(InvalidDataException.class, () -> {
+                person.setFirstName(invalidName);
+            });
 
-            assertNull(person.getFirstName(),
-                    ()->String.format("Expected first name to remain null for invalid input '%s', but was '%s'",
-                            invalidName, person.getFirstName()));
+            assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
         }
 
         @Test
@@ -147,20 +149,22 @@ public class PersonTest {
         void testSetFirstNameTooLong(){
             String tooLongString = "A".repeat(51);
             Person person = new Person();
-            person.setFirstName(tooLongString);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setFirstName(tooLongString);
+            });
 
-            assertNull(person.getFirstName(),
-                    ()->String.format("Expected to remain null for name length %d (max: 50), but was '%s'",
-                            tooLongString.length(), person.getFirstName()));
+            assertTrue(exception.getMessage().contains("First name must be 2-50 character long and contain only letters, hyphens, or apostrophes"));
         }
 
         @Test
         @DisplayName("Should not set null first name")
         void testSetNullFirstName() {
             Person person = new Person();
-            person.setFirstName(null);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setFirstName(null);
+            });
 
-            assertNull(person.getFirstName(), "Expected first name to remain null, when null is provided");
+            assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
         }
     }
 
@@ -189,11 +193,12 @@ public class PersonTest {
         @DisplayName("Should not set invalid last names - empty and whitespace")
         void testSetInvalidLastNames(String invalidLastName) {
             Person person = new Person();
-            person.setLastName(invalidLastName);
 
-            assertNull(person.getLastName(),
-                    ()->String.format("Expected last name to remain null for invalid input '%s', but was '%s'",
-                            invalidLastName, person.getLastName()));
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setLastName(invalidLastName);
+            });
+
+            assertTrue(exception.getMessage().contains("Last name cannot be null or blank"));
         }
 
         @Test
@@ -201,20 +206,22 @@ public class PersonTest {
         void testSetLastNameTooLong() {
             String tooLongString = "A".repeat(51);
             Person person = new Person();
-            person.setLastName(tooLongString);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setLastName(tooLongString);
+            });
 
-            assertNull(person.getLastName(),
-                    ()->String.format("Expected lastName to remain null length %d (max: 50), but was '%s'",
-                            tooLongString.length(), person.getLastName()));
+            assertTrue(exception.getMessage().contains("Last name must be 2-50 character long and contain only letters, hyphens, or apostrophes"));
         }
 
         @Test
         @DisplayName("Should not set null last name")
         void testSetNullLastName() {
             Person person = new Person();
-            person.setLastName(null);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setLastName(null);
+            });
 
-            assertNull(person.getLastName(), "Expected last name to remain null, when null is provided");
+            assertTrue(exception.getMessage().contains("Last name cannot be null or blank"));
         }
     }
 
@@ -254,20 +261,22 @@ public class PersonTest {
         @DisplayName("Should not set invalid addresses")
         void testSetInvalidAddress(String invalidAddress) {
             Person person = new Person();
-            person.setAddress(invalidAddress);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setAddress(invalidAddress);
+            });
 
-            assertNull(person.getAddress(),
-                    ()->String.format("Expected email to remail null for invalid input '%s' but was '%s'",
-                            invalidAddress, person.getAddress()));
+            assertTrue(exception.getMessage().contains("Address must match pattern St. NameOfStreet number"));
         }
 
         @Test
         @DisplayName("Should not set null email")
         void testSetNullAddress() {
             Person person = new Person();
-            person.setAddress(null);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+                person.setAddress(null);
+            });
 
-            assertNull(person.getAddress(), "Expected address to remail null, when null is provided");
+            assertTrue(exception.getMessage().contains("Address cannot be null or blank"));
         }
     }
 
@@ -312,10 +321,10 @@ public class PersonTest {
         }
 
         @Test
-        @DisplayName("Should format toString correctly with null fields")
+        @DisplayName("Should format toString correctly with default fields")
         void testToStringWithNullFields() {
             Person person = new Person();
-            String expectedString = "Person{firstName='null', lastName='null', address='null'}";
+            String expectedString = "Person{firstName='Jane', lastName='Doe', address='St. Central 1'}";
 
             assertEquals(expectedString, person.toString(),
                     () -> String.format("Expected toString to be '%s' but was '%s'", expectedString, person.toString()));

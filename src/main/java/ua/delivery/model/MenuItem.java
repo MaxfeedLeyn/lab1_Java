@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ua.delivery.util.MenuItemUtils;
 import ua.delivery.exception.InvalidDataException;
 
+import jakarta.validation.constraints.*;
+import ua.delivery.util.ValidationUtils;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,8 +14,22 @@ import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MenuItem implements Comparable<MenuItem> {
+    @NotBlank(message = "Name of the dish cannot be null or blank")
+    @Pattern(
+            regexp = "^[\\p{L}\\s\\-']{2,50}$",
+            message = "Name of the dish must be 2-50 characters long and contain only letters, spaces, hyphens, or apostrophes"
+    )
     private String name;
+
+    @Positive(message = "Price must be positive")
+    @Min(value = 1, message = "Price must be at least 1")
     private float price;
+
+    @NotBlank(message = "Category cannot be null or blank")
+    @Pattern(
+            regexp = "^[\\p{L}\\s\\-']{2,50}$",
+            message = "Category must be 2-50 characters long and contain only letters, spaces, hyphens, or apostrophes"
+    )
     private String category;
 
     private static final Logger logger = Logger.getLogger(MenuItem.class.getName());
@@ -21,9 +38,9 @@ public class MenuItem implements Comparable<MenuItem> {
     }
 
     public MenuItem(String name, float price, String category) {
-        setName(name);
-        setPrice(price);
-        setCategory(category);
+        this.name = MenuItemUtils.capitalizeText(name);
+        this.price = price;
+        this.category = MenuItemUtils.capitalizeText(category);
         logger.log(Level.INFO, "Create MenuItem");
     }
 
@@ -46,27 +63,57 @@ public class MenuItem implements Comparable<MenuItem> {
     }
 
     public void setName(String name) {
-        if(MenuItemUtils.isValidName(name)) {
-            this.name = MenuItemUtils.capitalizeText(name);
+        if(name != null){
+            name = MenuItemUtils.capitalizeText(name);
         }
-        else
+
+        String oldValue = this.name;
+        this.name = name;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Change MenuItem name to " + name);
+        }
+        catch (InvalidDataException e) {
             logger.log(Level.WARNING, "Invalid name for MenuItem: " + name);
+            this.name = oldValue;
+            throw e;
+        }
     }
 
     public void setCategory(String category) {
-        if(MenuItemUtils.isValidCategory(category)) {
-            this.category = MenuItemUtils.capitalizeText(category);
+        if(category != null){
+            category = MenuItemUtils.capitalizeText(category);
         }
-        else
+
+        String oldValue = this.category;
+        this.category = category;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Change MenuItem category to " + category);
+        }
+        catch (InvalidDataException e) {
             logger.log(Level.WARNING, "Invalid category for MenuItem: " + category);
+            this.category = oldValue;
+            throw e;
+        }
     }
 
     public void setPrice(float price) {
-        if (MenuItemUtils.isValidFloat(price)) {
-            this.price = price;
+
+        float oldValue = this.price;
+        this.price = price;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Change MenuItem price to " + price);
         }
-        else
+        catch (InvalidDataException e) {
             logger.log(Level.WARNING, "Invalid price for MenuItem: " + price);
+            this.price = oldValue;
+            throw e;
+        }
     }
 
     public boolean isComplete() {
@@ -74,13 +121,9 @@ public class MenuItem implements Comparable<MenuItem> {
     }
 
     public static MenuItem createMenuItem(String name, float price, String category) {
-        if(MenuItemUtils.isValidName(name) &&
-                MenuItemUtils.isValidFloat(price) &&
-                MenuItemUtils.isValidCategory(category)) {
-            logger.log(Level.INFO, "Successfully created MenuItem");
-            return new MenuItem(name, price, category);
-        }
-        throw new InvalidDataException("The attempt to create a MenuItem has failed, check name, price and category!");
+        MenuItem menuItem = new MenuItem(name,price,category);
+        ValidationUtils.validate(menuItem);
+        return menuItem;
     }
 
     @Override

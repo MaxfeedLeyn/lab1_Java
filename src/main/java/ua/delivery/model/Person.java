@@ -6,25 +6,53 @@ import ua.delivery.util.PersonUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import jakarta.validation.constraints.*;
+import ua.delivery.util.ValidationUtils;
 
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Person implements Comparable<Person> {
+    @NotBlank(message = "First name cannot be null or blank")
+    @Pattern(
+            regexp = "^[a-zA-Z\\s\\-']{2,50}$",
+            message = "First name must be 2-50 character long and contain only letters, hyphens, or apostrophes"
+    )
     protected String firstName;
+
+    @NotBlank(message = "Last name cannot be null or blank")
+    @Pattern(
+            regexp = "^[a-zA-Z\\s\\-']{2,50}$",
+            message = "Last name must be 2-50 character long and contain only letters, hyphens, or apostrophes"
+    )
     protected String lastName;
+
+    @NotBlank(message = "Address cannot be null or blank")
+    @Pattern(
+            regexp = "^(?i)St\\.?\\s+[\\p{L}0-9.'\\-\\s]+\\s+\\d+[A-Za-z0-9\\/-]*$",
+            message = "Address must match pattern St. NameOfStreet number"
+    )
     protected String address;
 
+    private static final Logger logger = Logger.getLogger(Person.class.getName());
+
+
     public Person(){
+        this.firstName = "Jane";
+        this.lastName = "Doe";
+        this.address = "St. Central 1";
     }
 
     public Person(
             @JsonProperty("firstName") String firstName,
             @JsonProperty("lastName") String lastName,
             @JsonProperty("address") String email) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        setAddress(email);
+        this.firstName = PersonUtils.capitalizeText(firstName);
+        this.lastName = PersonUtils.capitalizeText(lastName);
+        this.address = PersonUtils.formatAddress(email);
+        ValidationUtils.validate(this);
     }
 
     public Person(Person person){
@@ -38,32 +66,57 @@ public class Person implements Comparable<Person> {
     }
 
     public void setFirstName(String firstName) {
-//        if (firstName == null || firstName.isEmpty())
-//            throw new InvalidDataException("First name cannot be empty");
-        firstName = PersonUtils.capitalizeText(firstName);
-        if (PersonUtils.isValidName(firstName)) {
-            this.firstName = PersonUtils.capitalizeText(firstName);
+        if (firstName != null)
+            firstName = PersonUtils.capitalizeText(firstName);
+
+        String oldValue = this.firstName;
+        this.firstName = firstName;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Change First name to " + firstName);
+        }
+        catch (InvalidDataException e) {
+            logger.log(Level.WARNING, "Invalid First name: " + firstName);
+            this.firstName = oldValue;
+            throw e;
         }
     }
 
     public void setLastName(String lastName) {
-//        if (lastName == null || lastName.isEmpty())
-//            throw new InvalidDataException("Last name cannot be empty");
-        lastName = PersonUtils.capitalizeText(lastName);
-        if(PersonUtils.isValidName(lastName)) {
-            this.lastName = PersonUtils.capitalizeText(lastName);
+        if (lastName != null)
+            lastName = PersonUtils.capitalizeText(lastName);
+
+        String oldValue = this.lastName;
+        this.lastName = lastName;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Change Last name to " + lastName);
+        }
+        catch (InvalidDataException e) {
+            logger.log(Level.WARNING, "Invalid Last name: " + lastName);
+            this.lastName = oldValue;
+            throw e;
         }
     }
 
     public void setAddress(String address) {
-        if(address != null  && !address.isEmpty()) {
+        if (address != null)
             address = PersonUtils.formatAddress(address);
-            if(PersonUtils.isValidAddress(address)) {
-                this.address = address;
-            }
+
+        String oldValue = this.address;
+        this.address = address;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Change Last name to " + lastName);
         }
-//        else
-//            throw new InvalidDataException("Address cannot be empty");
+        catch (InvalidDataException e) {
+            logger.log(Level.WARNING, "Invalid Last name: " + lastName);
+            this.lastName = oldValue;
+            throw e;
+        }
     }
 
     public String getFirstName() {
@@ -79,12 +132,9 @@ public class Person implements Comparable<Person> {
     }
 
     public static Person createPerson(String firstName, String lastName, String addressName) {
-        if(PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName) &&
-                PersonUtils.isValidAddress(addressName)) {
-            return new Person(firstName, lastName, addressName);
-        }
-        throw new InvalidDataException("The attempt to create a Client has failed, check firstName and lastName and address(St. NameofTheStreet 1-1000)!");
+        Person person = new Person(firstName, lastName, addressName);
+        ValidationUtils.validate(person);
+        return person;
     }
 
     @Override

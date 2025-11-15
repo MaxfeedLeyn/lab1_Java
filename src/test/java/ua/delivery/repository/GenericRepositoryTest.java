@@ -4,7 +4,11 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.assertj.core.api.SoftAssertions;
+import ua.delivery.exception.AlreadyExistsException;
+import ua.delivery.exception.InvalidDataException;
+import ua.delivery.exception.AlreadyExistsException;
 import ua.delivery.model.Customer;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.List;
@@ -101,10 +105,11 @@ public class GenericRepositoryTest {
         SoftAssertions softly = new SoftAssertions();
 
         Customer tmpCustomer = new Customer("Jane", "Doe", "St. Central 1");
-        boolean added = customerRepository.add(tmpCustomer);
-        softly.assertThat(added)
-                .as("Add customer with the same fullName should fail")
-                .isFalse();
+        AlreadyExistsException exception = assertThrows(AlreadyExistsException.class, () -> {
+            boolean added = customerRepository.add(tmpCustomer);
+        });
+
+        assertTrue(exception.getMessage().contains("already exists"));
 
         softly.assertThat(customerRepository.size())
                 .as("Repository size should increase by 1")
@@ -117,10 +122,11 @@ public class GenericRepositoryTest {
     void testNullPrevention(){
         SoftAssertions softly = new SoftAssertions();
 
-        boolean added = customerRepository.add(null);
-        softly.assertThat(added)
-                .as("Second add of same customer should fail")
-                .isFalse();
+        InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+            boolean added = customerRepository.add(null);
+        });
+
+        assertTrue(exception.getMessage().contains("cannot be null"));
     }
 
     @ParameterizedTest
@@ -196,7 +202,6 @@ public class GenericRepositoryTest {
     void testRemoveNonExisted(){
         SoftAssertions softly = new SoftAssertions();
 
-        customerRepository.add(customer1);
         int initialSize =  customerRepository.size();
 
         boolean removed  = customerRepository.removeByIdentity("Jennifer Lopez");
@@ -216,7 +221,6 @@ public class GenericRepositoryTest {
     void testRemoveNull(){
         SoftAssertions softly = new SoftAssertions();
 
-        customerRepository.add(customer1);
         int initialSize =  customerRepository.size();
 
         boolean removed  = customerRepository.removeByIdentity(null);
@@ -237,7 +241,6 @@ public class GenericRepositoryTest {
     void testClear(){
         SoftAssertions softly = new SoftAssertions();
 
-        customerRepository.add(customer1);
         customerRepository.add(customer2);
         customerRepository.add(customer3);
 

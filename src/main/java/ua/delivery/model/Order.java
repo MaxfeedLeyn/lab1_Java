@@ -1,5 +1,6 @@
 package ua.delivery.model;
 
+import jakarta.validation.constraints.NotNull;
 import ua.delivery.exception.InvalidDataException;
 import ua.delivery.util.OrderUtils;
 
@@ -10,19 +11,27 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jakarta.validation.constraints.*;
+import ua.delivery.util.ValidationUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class Order implements Comparable<Order> {
+    @NotNull(message = "Customer cannot be null")
     private Customer customer;
+
+    @NotNull(message = "MenuItems cannot be null")
     private MenuItem[] menuItems;
+
+
     private Date orderDate;
 
     private static final SimpleDateFormat FIXED_DATE_FORMAT;
     static {
         FIXED_DATE_FORMAT = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-        FIXED_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("Europe/Kyiv")); // ensures EEST for Oct 9
+        FIXED_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("Europe/Kyiv"));
     }
 
     private static final Logger logger = Logger.getLogger(Order.class.getName());
@@ -31,9 +40,10 @@ public class Order implements Comparable<Order> {
     }
 
     public Order(Customer customer, MenuItem[] menuItems, Date orderDate) {
-        setCustomer(customer);
-        setMenuItems(menuItems);
-        setOrderDate(orderDate);
+        this.customer = customer;
+        this.menuItems = menuItems;
+        this.orderDate = orderDate;
+        ValidationUtils.validate(this);
         logger.log(Level.INFO, "Order Created");
     }
 
@@ -54,19 +64,35 @@ public class Order implements Comparable<Order> {
     }
 
     public void setCustomer(Customer customer) {
-        if (OrderUtils.isValidCustomer(customer)) {
-            this.customer = customer;
+
+        Customer oldCustomer = this.customer;
+        this.customer = customer;
+
+        try{
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Order customer updated");
         }
-        else
-            logger.log(Level.WARNING, "Invalid customer");
+        catch (InvalidDataException e){
+            logger.log(Level.WARNING, "Invalid customer data");
+            this.customer = oldCustomer;
+            throw e;
+        }
     }
 
     public void setMenuItems(MenuItem[] menuItems) {
-        if (OrderUtils.isValidMenu(menuItems)) {
-            this.menuItems = menuItems.clone();
+
+        MenuItem[] oldValue = this.menuItems;
+        this.menuItems = menuItems;
+
+        try{
+            ValidationUtils.validate(this);
+            logger.log(Level.INFO, "Order MenuItems Updated");
         }
-        else
+        catch (InvalidDataException e){
             logger.log(Level.WARNING, "Invalid menu items");
+            this.menuItems = oldValue;
+            throw e;
+        }
     }
 
     public Customer getCustomer() {

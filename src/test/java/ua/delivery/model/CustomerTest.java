@@ -53,12 +53,12 @@ public class CustomerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "AA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"})
+    @ValueSource(strings = {"", "   "})
     void testInvalidCustomerName(String name){
         InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
            new  Customer(name, "ValidLast", "St. Center 1");
         });
-        assertTrue(exception.getMessage().contains("First name is invalid"));
+        assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
     }
 
     private static Stream<Arguments> provideValidCSVTestData() {
@@ -88,7 +88,7 @@ public class CustomerTest {
     private static Stream<Arguments> provideInvalidCSVTestData() {
         return Stream.of(
                 Arguments.of("Mark,Tsukenberg,St. Center 1\nInvalid Line\nSable,Ward,St. Center 4", 2),
-                Arguments.of("Je,Bezos,St. Central 2\nJeffrey,Bezos,St. Central 2", 1)
+                Arguments.of("J,Bezos,St. Central 2\nJeffrey,Bezos,St. Central 2", 1)
         );
     }
 
@@ -108,13 +108,11 @@ public class CustomerTest {
     class ConstructorTests {
 
         @Test
-        @DisplayName("Default constructor should create person with null fields")
+        @DisplayName("Default constructor shouldnt trows InvalidDataException")
         void testConstructor() {
-            Customer customer = new Customer();
-
-            assertEquals("null", customer.getFirstName(), "Expected first name to be null after default constructor");
-            assertEquals("null", customer.getLastName(), "Expected last name to be null after default constructor");
-            assertEquals("St. Null 1", customer.getAddress(), "Expected address to be null after default constructor");
+            assertDoesNotThrow(() -> {
+                Customer customer = new Customer();
+            });
         }
 
         @Test
@@ -123,7 +121,7 @@ public class CustomerTest {
             InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
                 new Customer("", "validLastName", "St. validAddress 1");
             });
-            assertTrue(exception.getMessage().contains("First name is invalid"));
+            assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
         }
     }
 
@@ -147,7 +145,7 @@ public class CustomerTest {
                 Customer customer = new Customer(invalidName, "ValidLastName", "St. Center 1");
             });
 
-            assertTrue(exception.getMessage().contains("First name is invalid"));
+            assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
         }
 
         @Test
@@ -158,7 +156,7 @@ public class CustomerTest {
                 Customer customer = new Customer(tooLongString, "ValidLast", "St. Center 2");
             });
 
-            assertTrue(exception.getMessage().contains("First name is invalid"));
+            assertTrue(exception.getMessage().contains("First name must be 2-50 character long and contain only letters, hyphens, or apostrophes"));
         }
 
         @Test

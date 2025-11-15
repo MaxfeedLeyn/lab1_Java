@@ -27,54 +27,75 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args){
-        try {
-            AppConfig appConfig = new AppConfig();
-            PersistenceManager manager = new PersistenceManager(appConfig);
 
-            System.out.println("\n" + "=".repeat(70) + "\n");
+        try{
+            MenuItem test = MenuItem.createMenuItem("Sushi", 15f, "Japan");
+//            MenuItem test2 = MenuItem.createMenuItem("Sushi", 15f, "Japan");
+            test.setName("Suushi");
+            test.setPrice(20f);
+            test.setCategory("Japanese");
 
-            List<Person> personRepo = new ArrayList<>();
+//            Customer testCustomer = new Customer("Jane", "Doe", "St. 1");
+//            System.out.println(testCustomer);
 
-            personRepo.add(new Person("Mark", "Tsukerberg", "St. Central 1"));
-            personRepo.add(new Person("Sau", "Paulo", "St. Central 2"));
-            personRepo.add(new Person("Robert", "Polson", "St. Central 3"));
-
-            manager.save(personRepo, "persons", Person.class, "JSON");
-            System.out.println("Saved to: " + appConfig.getJsonFilePath("persons"));
-
-            manager.save(personRepo, "persons", Person.class, "YAML");
-            System.out.println("Saved to: " + appConfig.getYamlFilePath("persons"));
-
-            GenericRepository<Person> loadedFromJson = new GenericRepository<>(
-                    person -> person.getFirstName(),
-                    "Person"
-            );
-            List<Person> personList = manager.load("persons", Person.class, "JSON");
-            List<Person> personList2 = manager.load("persons", Person.class, "YAML");
-            for(Person person : personList){
-                System.out.println(person);
-            }
-
-            for(Person person : personList2){
-                System.out.println(person);
-            }
-
-
-            MenuItem menuItem1 = new MenuItem("Pasta", 10.0f, "Italian");
-            MenuItem menuItem2 = new MenuItem("Filet-O-Fish", 20.0f, "English");
-            MenuItem menuItem3 = new MenuItem("burrito", 25.0f, "Mexican");
-            MenuItemRepository menuItemRepository = new MenuItemRepository();
-            menuItemRepository.add(menuItem1);
-            menuItemRepository.add(menuItem2);
-            menuItemRepository.add(menuItem3);
-            manager.save(menuItemRepository.getAll(), "menuItems", MenuItem.class, "YAML");
-            List<MenuItem> list = manager.load("menuitems", MenuItem.class, "YAML");
+            Restaurant restaurant = Restaurant.createRestaurant("", "", "");
         }
-        catch (InvalidDataException e) {
+        catch (InvalidDataException e){
             System.out.println(e.getMessage());
         }
-        catch (DataSerializationException e){
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
+
+
+//        try {
+//            AppConfig appConfig = new AppConfig();
+//            PersistenceManager manager = new PersistenceManager(appConfig);
+//
+//            System.out.println("\n" + "=".repeat(70) + "\n");
+//
+//            List<Person> personRepo = new ArrayList<>();
+//
+//            personRepo.add(new Person("Mark", "Tsukerberg", "St. Central 1"));
+//            personRepo.add(new Person("Sau", "Paulo", "St. Central 2"));
+//            personRepo.add(new Person("Robert", "Polson", "St. Central 3"));
+//
+//            manager.save(personRepo, "persons", Person.class, "JSON");
+//            System.out.println("Saved to: " + appConfig.getJsonFilePath("persons"));
+//
+//            manager.save(personRepo, "persons", Person.class, "YAML");
+//            System.out.println("Saved to: " + appConfig.getYamlFilePath("persons"));
+//
+//            GenericRepository<Person> loadedFromJson = new GenericRepository<>(
+//                    person -> person.getFirstName(),
+//                    "Person"
+//            );
+//            List<Person> personList = manager.load("persons", Person.class, "JSON");
+//            List<Person> personList2 = manager.load("persons", Person.class, "YAML");
+//            for(Person person : personList){
+//                System.out.println(person);
+//            }
+//
+//            for(Person person : personList2){
+//                System.out.println(person);
+//            }
+//
+//
+//            MenuItem menuItem1 = new MenuItem("Pasta", 10.0f, "Italian");
+//            MenuItem menuItem2 = new MenuItem("Filet-O-Fish", 20.0f, "English");
+//            MenuItem menuItem3 = new MenuItem("burrito", 25.0f, "Mexican");
+//            MenuItemRepository menuItemRepository = new MenuItemRepository();
+//            menuItemRepository.add(menuItem1);
+//            menuItemRepository.add(menuItem2);
+//            menuItemRepository.add(menuItem3);
+//            manager.save(menuItemRepository.getAll(), "menuItems", MenuItem.class, "YAML");
+//            List<MenuItem> list = manager.load("menuitems", MenuItem.class, "YAML");
+//        }
+//        catch (InvalidDataException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        catch (DataSerializationException e){
+//            System.out.println(e.getMessage());
+//        }
     }
 }
