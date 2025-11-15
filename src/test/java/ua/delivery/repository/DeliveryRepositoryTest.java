@@ -26,9 +26,9 @@ public class DeliveryRepositoryTest {
     @BeforeAll
     public void setUpTestData() {
         Calendar cal1 = Calendar.getInstance(), cal2 = Calendar.getInstance(), cal3 = Calendar.getInstance();
-        cal1.set(2025, Calendar.OCTOBER, 10);
-        cal2.set(2025, Calendar.OCTOBER, 11);
-        cal3.set(2025, Calendar.OCTOBER, 12);
+        cal1.set(2025, Calendar.NOVEMBER, 10);
+        cal2.set(2025, Calendar.NOVEMBER, 11);
+        cal3.set(2025, Calendar.NOVEMBER, 12);
         Date orderDate1 = cal1.getTime(), orderDate2 = cal2.getTime(),  orderDate3 = cal3.getTime();
         customer1 = new Customer("Jane", "Doe", "St. Central 1");
         customer2 = new Customer("Robert", "Polson", "St. Central 2");
