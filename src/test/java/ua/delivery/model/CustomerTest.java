@@ -163,9 +163,11 @@ public class CustomerTest {
         @DisplayName("Should not set null first name")
         void testSetNullFirstName() {
             Person person = new Person();
-            person.setFirstName(null);
+            InvalidDataException exception = assertThrows(InvalidDataException.class, ()->{
+                person.setFirstName(null);
+            });
 
-            assertNull(person.getFirstName(), "Expected first name to remain null, when null is provided");
+            assertTrue(exception.getMessage().contains("First name cannot be null or blank"));
         }
     }
 
