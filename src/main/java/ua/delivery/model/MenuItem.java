@@ -21,8 +21,7 @@ public class MenuItem implements Comparable<MenuItem> {
     )
     private String name;
 
-    @Positive(message = "Price must be positive")
-    @Min(value = 1, message = "Price must be at least 1")
+    @PositiveOrZero(message = "Price must be positive")
     private float price;
 
     @NotBlank(message = "Category cannot be null or blank")
@@ -35,6 +34,7 @@ public class MenuItem implements Comparable<MenuItem> {
     private static final Logger logger = Logger.getLogger(MenuItem.class.getName());
 
     public MenuItem(){
+        this("####", 0f, "Abracadabra");
     }
 
     public MenuItem(String name, float price, String category) {
@@ -117,7 +117,7 @@ public class MenuItem implements Comparable<MenuItem> {
     }
 
     public boolean isComplete() {
-        return name != null && price != 0 && category != null;
+        return !name.equals("####") && price != 0 && !category.equals("Abracadabra");
     }
 
     public static MenuItem createMenuItem(String name, float price, String category) {

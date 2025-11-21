@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 public class Staff extends Person {
 
     @Min(value = 0, message = "Rank must be at least 0")
+    @Max(value = 5, message = "Max rank can be only 5")
     private float rankOfDelivery = 0;
 
     private static final Logger logger = Logger.getLogger(Staff.class.getName());
