@@ -10,14 +10,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ua.delivery.config.AppConfig;
 import ua.delivery.persistence.PersistenceManager;
 import ua.delivery.exception.DataSerializationException;
+import ua.delivery.repository.CustomerRepository;
 import ua.delivery.repository.GenericRepository;
 import ua.delivery.repository.MenuItemRepository;
+import ua.delivery.repository.OrderRepository;
 import ua.delivery.serializer.DataSerializer;
 import ua.delivery.serializer.JsonDataSerializer;
 import ua.delivery.exception.InvalidDataException;
 import ua.delivery.parser.*;
 import ua.delivery.service.*;
 import ua.delivery.model.*;
+import ua.delivery.service.comparison.ComparisonResult;
+import ua.delivery.service.comparison.PerformanceComparisonService;
+import ua.delivery.service.loading.DataLoader;
+import ua.delivery.service.loading.ExecutorLoadingStrategy;
+import ua.delivery.service.loading.ParallelLoadingStrategy;
+import ua.delivery.service.loading.SequentialLoadingStrategy;
+import ua.delivery.service.reporting.DeliveryReport;
+import ua.delivery.service.reporting.DeliveryReportService;
 
 import java.util.*;
 import java.io.IOException;
@@ -28,24 +38,24 @@ public class Main {
 
     public static void main(String[] args){
 
-        try{
-            MenuItem test = MenuItem.createMenuItem("Sushi", 15f, "Japan");
-//            MenuItem test2 = MenuItem.createMenuItem("Sushi", 15f, "Japan");
-            test.setName("Suushi");
-            test.setPrice(20f);
-            test.setCategory("Japanese");
-
-//            Customer testCustomer = new Customer("Jane", "Doe", "St. 1");
-//            System.out.println(testCustomer);
-
-            Restaurant restaurant = Restaurant.createRestaurant("", "", "");
-        }
-        catch (InvalidDataException e){
-            System.out.println(e.getMessage());
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+//        try{
+//            MenuItem test = MenuItem.createMenuItem("Sushi", 15f, "Japan");
+////            MenuItem test2 = MenuItem.createMenuItem("Sushi", 15f, "Japan");
+//            test.setName("Suushi");
+//            test.setPrice(20f);
+//            test.setCategory("Japanese");
+//
+////            Customer testCustomer = new Customer("Jane", "Doe", "St. 1");
+////            System.out.println(testCustomer);
+//
+//            Restaurant restaurant = Restaurant.createRestaurant("", "", "");
+//        }
+//        catch (InvalidDataException e){
+//            System.out.println(e.getMessage());
+//        }
+//        catch (Exception e){
+//            System.out.println(e.getMessage());
+//        }
 
 
 //        try {
@@ -97,5 +107,117 @@ public class Main {
 //        catch (DataSerializationException e){
 //            System.out.println(e.getMessage());
 //        }
+
+        AppConfig appConfig = new AppConfig();
+        PersistenceManager persistenceManager = new PersistenceManager(appConfig);
+
+        CustomerRepository customerRepository = new CustomerRepository();
+        OrderRepository orderRepository = new OrderRepository();
+
+        demonstrateParallelLoading(
+                persistenceManager,
+                customerRepository,
+                orderRepository
+        );
+
+        demonstrateReportGeneration(
+                customerRepository,
+                orderRepository
+        );
+
+        demonstratePerformanceComparison(
+                customerRepository,
+                orderRepository
+        );
+    }
+
+    private static void demonstrateParallelLoading(
+        PersistenceManager persistenceManager,
+        CustomerRepository customerRepository,
+        OrderRepository orderRepository
+    ){
+        DataLoader dataLoader = new DataLoader(persistenceManager);
+
+        LoadResult sequentialResult = dataLoader.load(
+            customerRepository,
+            orderRepository,
+            new SequentialLoadingStrategy()
+        );
+        System.out.println(sequentialResult);
+
+        clearRepository(customerRepository, orderRepository);
+
+        LoadResult parallelResult = dataLoader.load(
+                customerRepository,
+                orderRepository,
+                new ParallelLoadingStrategy()
+        );
+        System.out.println(parallelResult);
+
+        clearRepository(customerRepository, orderRepository);
+
+        LoadResult executeResult = dataLoader.load(
+                customerRepository,
+                orderRepository,
+                new ExecutorLoadingStrategy(4)
+        );
+        System.out.println(executeResult);
+
+        System.out.println("\n === Loading Time Comparison ===");
+        System.out.println("Sequential:     " + sequentialResult.durationMs() + "ms" );
+        System.out.println("Parallel:       " + parallelResult.durationMs() + "ms" );
+        System.out.println("ExecuteService: " + executeResult.durationMs() + "ms" );
+    }
+
+    private static void demonstrateReportGeneration(
+            CustomerRepository customerRepository,
+            OrderRepository orderRepository){
+
+        DeliveryReportService reportService = new DeliveryReportService(4);
+
+        try{
+
+            DeliveryReport report = reportService.generateReportAsync(
+                    customerRepository,
+                    orderRepository
+            ).join();
+
+            System.out.println(report);
+
+            DeliveryReport report2 = reportService.generateReportWithExecutor(
+                    customerRepository,
+                    orderRepository
+            );
+
+            System.out.println("ExecutorService report generation: " + report2.generationTimeMs() + "ms\n");
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            reportService.shutdown();
+        }
+    }
+
+    private static void demonstratePerformanceComparison(
+            CustomerRepository customerRepository,
+            OrderRepository orderRepository){
+
+        PerformanceComparisonService comparisonService = new PerformanceComparisonService();
+
+        ComparisonResult filterResult = comparisonService.compareCustomerFiltering(
+                customerRepository, "er"
+        );
+        System.out.println(filterResult);
+
+        ComparisonResult ordersResult = comparisonService.compareOrderCalculation(
+                orderRepository
+        );
+        System.out.println(ordersResult);
+    }
+
+    private static void clearRepository(
+            CustomerRepository customerRepository,
+            OrderRepository orderRepository){
+        customerRepository.clear();
+        orderRepository.clear();
     }
 }

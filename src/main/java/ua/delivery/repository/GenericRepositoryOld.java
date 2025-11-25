@@ -1,28 +1,26 @@
 package ua.delivery.repository;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import ua.delivery.exception.InvalidDataException;
 import ua.delivery.exception.AlreadyExistsException;
 
-public class GenericRepository<T> {
-    private static final Logger logger = Logger.getLogger(GenericRepository.class.getName());
+public class GenericRepositoryOld<T> {
+    private static final Logger logger = Logger.getLogger(GenericRepositoryOld.class.getName());
 
     private final List<T> items;
     private final IdentityExtractor<T> identityExtractor;
     private final String entityType;
 
-    public GenericRepository(IdentityExtractor<T> identityExtractor, String entityType) {
-        this.items = new CopyOnWriteArrayList<>();
+    public GenericRepositoryOld(IdentityExtractor<T> identityExtractor, String entityType) {
+        this.items = new ArrayList<>();
         this.identityExtractor =  identityExtractor;
         this.entityType = entityType;
         logger.info("Creating repository for entity: " + entityType);
-        logger.info("Created thread-safe repository for " + entityType);
     }
 
-    public synchronized boolean add(T item) {
+    public boolean add(T item) {
         if (item == null) {
             throw new InvalidDataException(entityType + " cannot be null");
         }
@@ -34,31 +32,14 @@ public class GenericRepository<T> {
             throw new AlreadyExistsException(errorMsg);
         }
 
-        items.add(item);
-        logger.info("Added id: "+ entityType + ": " + identity);
-        return true;
+        boolean added = items.add(item);
+        if (added) {
+            logger.info("Added id: "+ entityType + ": " + identity);
+        }
+        return added;
     }
 
-    public int addAll(Collection<T> items) {
-        if(items == null || items.isEmpty()) {
-            return 0;
-        }
-        int addedCount = 0;
-        for (T item : items) {
-            try{
-                if(add(item)) {
-                    addedCount++;
-                }
-            } catch (AlreadyExistsException e) {
-                logger.warning("Skipping duplicate:" + e.getMessage());
-            }
-        }
-
-        logger.info("Bulk added" + addedCount + "of " + items.size() + " items to " + entityType);
-        return addedCount;
-    }
-
-    public synchronized boolean remove(T item) {
+    public boolean remove(T item) {
         if (item == null) {
             logger.warning("Attempted to remove null argument" + entityType);
             return false;
@@ -72,7 +53,7 @@ public class GenericRepository<T> {
         return removed;
     }
 
-    public synchronized boolean removeByIdentity(String identity) {
+    public boolean removeByIdentity(String identity) {
         if (identity == null) {
             logger.warning("Attempted to remove" + entityType + " null identity");
             return false;
@@ -133,25 +114,27 @@ public class GenericRepository<T> {
         return items.isEmpty();
     }
 
-    public synchronized void clear() {
+    public void clear() {
         int sizeBefore = items.size();
         items.clear();
         logger.info("Cleared repository. Removed" + sizeBefore + " " + entityType +  " items");
     }
 
     List<T> getItemsForTesting() {
-        return new ArrayList<>(items);
+        return items;
     }
 
     public void sortByIdentity(String order){
-        List<T> sorted = new ArrayList<>(items);
-        sorted.sort(Comparator.comparing(identityExtractor::extractIdentity));
-        if (order.equals("desc")) {
-            Collections.reverse(sorted);
+
+        Comparator<T> comparator = Comparator.comparing(
+                identityExtractor::extractIdentity,
+                Comparator.nullsFirst(String::compareTo));
+
+        if (order != null && (order.equalsIgnoreCase("desc") || order.equalsIgnoreCase("descending"))) {
+            comparator = comparator.reversed();
         }
-        items.clear();
-        items.addAll(sorted);
-        boolean asc = order.equals("asc");
-        logger.info(String.format("Sorted %s by identity in %s order", entityType, asc ? "ascending" : "descending"));
+
+        items.sort(comparator);
+        logger.info("Sorted " + entityType + " by identity (" + (order == null ? "asc" : order) + "). Count: " + items.size());
     }
 }
