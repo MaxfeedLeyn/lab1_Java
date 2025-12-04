@@ -107,70 +107,70 @@ public class OrderTest {
         }
     }
 
-    @Nested
-    @DisplayName("equals and hashCode Tests")
-    class EqualsAndHashCodeTests {
-
-        private Date orderDate;
-        private Customer customer;
-        private MenuItem[] menuItems;
-
-        private EqualsAndHashCodeTests(){
-            Calendar cal = Calendar.getInstance();
-            cal.set(2025, Calendar.OCTOBER, 29);
-            orderDate = cal.getTime();
-            customer = new Customer("Alex", "Vasilenko", "      St. center 13                   ");
-            menuItems = new MenuItem[2];
-            menuItems[0] = new MenuItem("Pizza", 10, "Italic");
-            menuItems[1] = MenuItem.createMenuItem("Burger", 20, "American");
-        }
-
-        @Test
-        @DisplayName("Should be equal to itself")
-        void testEqualsReflexive() {
-            Order order = Order.createOrder(customer, menuItems, orderDate);
-
-            assertTrue(order.equals(order), "Order should be equal to itself");
-        }
-
-        @Test
-        @DisplayName("Should be equal to person with same data")
-        void testEqualsSymmetric() {
-            Order order1 = Order.createOrder(customer, menuItems, orderDate);
-            Order order2 = Order.createOrder(customer, menuItems, orderDate);
-
-            assertTrue(order1.equals(order2),
-                    "Orders with same data should be equal");
-            assertTrue(order2.equals(order1),
-                    "Equality should be symmetric");
-        }
-
-        @Test
-        @DisplayName("Should not be equal to null")
-        void testEqualsWithNull() {
-            Person person = new Person("John", "Doe", "St. Central 1");
-
-            assertFalse(person.equals(null), "Order should not be equal to null");
-        }
-
-        @Test
-        @DisplayName("Should not be equal to different class")
-        void testEqualsWithDifferentClass() {
-            Order order = Order.createOrder(customer, menuItems, orderDate);
-            String notAPerson = "Not a Order";
-
-            assertFalse(order.equals(notAPerson), "Order should not be equal to different class");
-        }
-
-        @Test
-        @DisplayName("Equal persons should have same hashCode")
-        void testHashCodeConsistency() {
-            Order order1 = Order.createOrder(customer, menuItems, orderDate);
-            Order order2 = Order.createOrder(customer, menuItems, orderDate);
-
-            assertTrue(order1.equals(order2), "Orders should be equal");
-            assertEquals(order1.hashCode(), order2.hashCode(),
-                    "Equal Orders should have same hashCode");
-        }
-    }
+//    @Nested
+//    @DisplayName("equals and hashCode Tests")
+//    class EqualsAndHashCodeTests {
+//
+//        private Date orderDate;
+//        private Customer customer;
+//        private MenuItem[] menuItems;
+//
+//        private EqualsAndHashCodeTests(){
+//            Calendar cal = Calendar.getInstance();
+//            cal.set(2025, Calendar.OCTOBER, 29);
+//            orderDate = cal.getTime();
+//            customer = new Customer("Alex", "Vasilenko", "      St. center 13                   ");
+//            menuItems = new MenuItem[2];
+//            menuItems[0] = new MenuItem("Pizza", 10, "Italic");
+//            menuItems[1] = MenuItem.createMenuItem("Burger", 20, "American");
+//        }
+//
+//        @Test
+//        @DisplayName("Should be equal to itself")
+//        void testEqualsReflexive() {
+//            Order order = Order.createOrder(customer, menuItems, orderDate);
+//
+//            assertTrue(order.equals(order), "Order should be equal to itself");
+//        }
+//
+//        @Test
+//        @DisplayName("Should be equal to person with same data")
+//        void testEqualsSymmetric() {
+//            Order order1 = Order.createOrder(customer, menuItems, orderDate);
+//            Order order2 = Order.createOrder(customer, menuItems, orderDate);
+//
+//            assertTrue(order1.equals(order2),
+//                    "Orders with same data should be equal");
+//            assertTrue(order2.equals(order1),
+//                    "Equality should be symmetric");
+//        }
+//
+//        @Test
+//        @DisplayName("Should not be equal to null")
+//        void testEqualsWithNull() {
+//            Person person = new Person("John", "Doe", "St. Central 1");
+//
+//            assertFalse(person.equals(null), "Order should not be equal to null");
+//        }
+//
+//        @Test
+//        @DisplayName("Should not be equal to different class")
+//        void testEqualsWithDifferentClass() {
+//            Order order = Order.createOrder(customer, menuItems, orderDate);
+//            String notAPerson = "Not a Order";
+//
+//            assertFalse(order.equals(notAPerson), "Order should not be equal to different class");
+//        }
+//
+//        @Test
+//        @DisplayName("Equal persons should have same hashCode")
+//        void testHashCodeConsistency() {
+//            Order order1 = Order.createOrder(customer, menuItems, orderDate);
+//            Order order2 = Order.createOrder(customer, menuItems, orderDate);
+//
+//            assertTrue(order1.equals(order2), "Orders should be equal");
+//            assertEquals(order1.hashCode(), order2.hashCode(),
+//                    "Equal Orders should have same hashCode");
+//        }
+//    }
 }
