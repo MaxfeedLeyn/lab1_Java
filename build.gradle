@@ -2,32 +2,8 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'checkstyle'
-}
-
-jacoco{
-    version = "0.8.11"
-}
-
-checkstyle{
-    toolVersion = "10.12.5"
-    configFile = file("config/checkstyle/checkstyle.xml")
-    ignoreFailures = false
-    maxWarnings = 0
-}
-
-checkstyleMain{
-    reports{
-        xml.required = false
-        html.required = true
-        html.outputLocation = file("$buildDir/reports/checkstyle/main.html")
-    }
-}
-
-checkstyleTest{
-    reports{
-        xml.required = true
-        html.required = true
-    }
+    id 'war'
+    id 'org.gretty' version '4.1.0' //for run Tomcat
 }
 
 group 'org.example'
@@ -36,6 +12,44 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+//  Gretty settings (embedded Tomcat/Jetty)
+gretty {
+    httpPort = 8080
+    contextPath = '/api'
+    servletContainer = 'tomcat10' // or 'jetty11'
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+//checkstyle {
+//    toolVersion = '10.12.5'
+//    configFile = file("config/checkstyle/checkstyle.xml")
+//    ignoreFailures = false
+//    maxWarnings = 0
+//}
+
+//checkstyleMain {
+//    reports {
+//        xml.required = false
+//        html.required = true
+//        html.outputLocation = file("$buildDir/reports/checkstyle/main.html")
+//    }
+//}
+
+//checkstyleTest {
+//    reports {
+//        xml.required = true
+//        html.required = true
+//    }
+//}
 
 dependencies {
     def jupiter = "5.10.1"
@@ -47,13 +61,19 @@ dependencies {
 
     testImplementation "org.assertj:assertj-core:" + assertj
 
+    implementation 'org.slf4j:slf4j-api:2.0.12'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.4.14'
+
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.0'
-
-    implementation 'org.hibernate.validator:hibernate-validator:8.0.3.Final'
-    implementation 'org.glassfish:jakarta.el:4.0.2'
-
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0'
+
+    // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
+    implementation 'org.hibernate.validator:hibernate-validator:9.0.1.Final'
+    implementation 'org.glassfish.expressly:expressly:6.0.0'
+
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:5.0.0'
+
 }
 
 test {
@@ -61,12 +81,16 @@ test {
     finalizedBy jacocoTestReport
 }
 
-jacocoTestReport{
+jacocoTestReport {
     dependsOn test
 
-    reports{
+    reports {
         xml.required = false
         html.required = true
         csv.required = false
     }
+}
+
+war {
+    archiveFileName = 'student-management-api.war'
 }

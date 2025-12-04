@@ -94,6 +94,23 @@ public class GenericRepository<T> {
         }
     }
 
+
+    public synchronized boolean update(T newItem) {
+        if (newItem == null) {
+            throw new InvalidDataException(entityType + " cannot be null");
+        }
+        String identity = identityExtractor.extractIdentity(newItem);
+        Optional<T> existingItem = findByIdentity(identity);
+        if (existingItem.isEmpty()) {
+            logger.warning("Cannot update: " + entityType + " not found with identity: " + identity);
+            return false;
+        }
+        items.remove(existingItem.get());
+        items.add(newItem);
+        logger.info("Updated " + entityType + " by identity: " + identity);
+        return true;
+    }
+
     public boolean contains(T item) {
         return items.contains(item);
     }

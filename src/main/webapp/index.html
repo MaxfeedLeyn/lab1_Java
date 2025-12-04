@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Management API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #007bff;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #28a745;
+            color: white;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+        .method.post { background: #ffc107; color: #333; }
+        .method.put { background: #17a2b8; }
+        .method.delete { background: #dc3545; }
+        .description {
+            color: #666;
+            font-family: 'Segoe UI', sans-serif;
+            margin-left: 10px;
+        }
+        .filter {
+            border-left-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1> Delivery Management API</h1>
+
+    <h2> Customer</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/customers" target="_blank">/api/customers</a>
+        <span class="description">- Get all customers</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/customers/Steve" target="_blank">/api/students/{id}</a>
+        <span class="description">- Get customer by FirstName</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/students
+        <span class="description">- Create new student</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/students/{id}
+        <span class="description">- Update student</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/students/{id}
+        <span class="description">- Delete student</span>
+    </div>
+
+    <h2> MenuItems</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/menuitems" target="_blank">/api/menuitems</a>
+        <span class="description">- Get all menuitems</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/menuitems?mein=2&max=4" target="_blank">/api/menuItems?min=X&max=Y</a>
+        <span class="description">- Filter by price range</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        /api/menuitems/{name}
+        <span class="description">- Get MenuItem by name</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/menuitems
+        <span class="description">- Create new MenuItems</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/menuitems/{name}
+        <span class="description">- Update MenuItem</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/menuitems/{name}
+        <span class="description">- Delete MenuItem</span>
+    </div>
+
+    <hr style="margin: 30px 0;">
+    <p><small>Built with Java Servlets, Jackson, SLF4J/Logback</small></p>
+</div>
+</body>
+</html>

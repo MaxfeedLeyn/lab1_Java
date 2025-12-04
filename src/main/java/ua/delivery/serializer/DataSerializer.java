@@ -9,5 +9,11 @@ public interface DataSerializer<T> {
 
     List<T> deserialize(String filePath, Class<T> tClass) throws DataSerializationException;
 
+    String toString(T item) throws DataSerializationException;
+
+    String listToString(List<T> items) throws DataSerializationException;
+
+    T fromString(String str, Class<T> clazz) throws DataSerializationException;
+
     String getFormat();
 }
